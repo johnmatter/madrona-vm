@@ -1,5 +1,8 @@
-# Build artifacts
+# build
 /build/
 
-# macOS
+# caches
+/.cache/
+
+# os files
 .DS_Store 

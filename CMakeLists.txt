@@ -18,11 +18,17 @@ include_directories(external/madronalib/external/sse2neon)
 
 # Collect source files
 file(GLOB_RECURSE SRC_FILES
-  src/*.cpp
+  "src/dsp/*.cpp"
 )
 
-# Create executable
-add_executable(madronalib_vm_synth ${SRC_FILES})
+# Create test executable
+add_executable(run_tests
+  tests/TestMain.cpp
+  tests/dsp/osc_sine_test.cpp
+  ${SRC_FILES}
+)
+
+target_include_directories(run_tests PRIVATE external/madronalib/Tests)
 
 # Link madronalib
-target_link_libraries(madronalib_vm_synth madronalib) 
+target_link_libraries(run_tests madronalib) 
