@@ -1,0 +1,11 @@
+{
+  "nodes": {
+    "osc1": { "type": "osc.sine", "params": { "freq": 440 } },
+    "gain1": { "type": "gain", "params": { "amp": 0.5 } },
+    "out": { "type": "output" }
+  },
+  "connections": [
+    { "from": ["osc1", "out"], "to": ["gain1", "in"] },
+    { "from": ["gain1", "out"], "to": ["out", "in"] }
+  ]
+}

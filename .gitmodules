@@ -1,0 +1,4 @@
+[submodule "external/madronalib"]
+	path = external/madronalib
+	url = https://github.com/johnmatter/madronalib.git
+	branch = fix-compilation-issues
