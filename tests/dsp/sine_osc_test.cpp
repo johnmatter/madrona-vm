@@ -20,7 +20,8 @@ TEST_CASE("Sine Oscillator Test", "[dsp]") {
 
     for (int i = 0; i < blockSize; ++i) {
       INFO("Sample " << i << ": " << out[i]);
-      REQUIRE(out[i] >= -1.0f && out[i] <= 1.0f);
+      REQUIRE(out[i] >= -1.0f);
+      REQUIRE(out[i] <= 1.0f);
     }
   }
 } 
