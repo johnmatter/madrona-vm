@@ -42,12 +42,12 @@ A subtractive synth is built from a few key components:
     -   **Source**: `MLDSPFilters.h` (`MLMoogLadder`).
     -   **I/O**: `in[0]`: signal, `in[1]`: cutoff freq, `in[2]`: resonance, `out[0]`: signal.
 
--   [ ] **`Gain`**
+-   [x] **`Gain`**
     -   amplifier to control signal level (our VCA).
     -   **Source**: `MLDSPOps.h`.
     -   **I/O**: `in[0]`: signal, `in[1]`: gain, `out[0]`: signal.
 
--   [ ] **`ADSR`**
+-   [x] **`ADSR`**
     -   Attack Decay Sustain Release envelope generator.
     -   **Source**: `MLDSPGens.h` (`RampGen` or `LineGen` can be adapted. A dedicated ADSR might need to be built from these primitives.).
     -   **I/O**: `in[0]`: gate, `in[1]`: attack, `in[2]`: decay, `in[3]`: sustain, `in[4]`: release, `out[0]`: envelope signal.
