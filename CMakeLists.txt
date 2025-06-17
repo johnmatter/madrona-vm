@@ -27,6 +27,7 @@ add_executable(run_tests
   tests/dsp/sine_osc_test.cpp
   tests/dsp/gain_test.cpp
   tests/dsp/adsr_test.cpp
+  tests/dsp/voice_controller_test.cpp
   ${SRC_FILES}
 )
 

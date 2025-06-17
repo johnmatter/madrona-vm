@@ -49,12 +49,12 @@ A subtractive synth is built from a few key components:
 
 -   [x] **`ADSR`**
     -   Attack Decay Sustain Release envelope generator.
-    -   **Source**: `MLDSPGens.h` (`RampGen` or `LineGen` can be adapted. A dedicated ADSR might need to be built from these primitives.).
+    -   **Source**: `MLDSPFilters.h` (`ADSR`)
     -   **I/O**: `in[0]`: gate, `in[1]`: attack, `in[2]`: decay, `in[3]`: sustain, `in[4]`: release, `out[0]`: envelope signal.
 
--   [ ] **`NoteIn`**
+-   [x] **`NoteIn`**
     -   Receives discrete note events and outputs signals.
-    -   **Source**: Custom Logic.
+    -   **Source**: `MLEventsToSignals` (`EventsToSignals`, `Events`.)
     -   **I/O**: `out[0]`: gate (0 or 1), `out[1]`: pitch (MIDI note number), `out[2]`: velocity (0-1).
 
 ---
