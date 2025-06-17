@@ -24,7 +24,7 @@ file(GLOB_RECURSE SRC_FILES
 # Create test executable
 add_executable(run_tests
   tests/TestMain.cpp
-  tests/dsp/osc_sine_test.cpp
+  tests/dsp/sine_osc_test.cpp
   ${SRC_FILES}
 )
 

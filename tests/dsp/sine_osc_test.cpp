@@ -1,9 +1,9 @@
-#include "dsp/osc_sine.h"
+#include "dsp/sine_osc.h"
 #include "catch.hpp"
 
 TEST_CASE("Sine Oscillator Test", "[dsp]") {
   constexpr float sampleRate = 48000.0f;
-  constexpr int blockSize = 64;
+  constexpr int blockSize = 64; // Should match kFloatsPerDSPVector
   float freq[blockSize];
   float out[blockSize];
 
@@ -11,18 +11,16 @@ TEST_CASE("Sine Oscillator Test", "[dsp]") {
     freq[i] = 440.0f;
   }
 
-  void* osc = osc_sine_create(sampleRate);
-  REQUIRE(osc != nullptr);
+  SineOsc osc(sampleRate);
 
-  SECTION("Process a block") {
-    osc_sine_process(osc, freq, out);
+  SECTION("Output is normalized") {
+    const float* inputs[] = {freq};
+    float* outputs[] = {out};
+    osc.process(inputs, outputs);
 
     for (int i = 0; i < blockSize; ++i) {
       INFO("Sample " << i << ": " << out[i]);
-      REQUIRE(out[i] >= -1.0f);
-      REQUIRE(out[i] <= 1.0f);
+      REQUIRE(out[i] >= -1.0f && out[i] <= 1.0f);
     }
   }
-
-  osc_sine_destroy(osc);
 } 
