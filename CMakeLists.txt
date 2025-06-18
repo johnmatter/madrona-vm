@@ -22,21 +22,24 @@ file(GLOB_RECURSE SRC_FILES
 # Create test executable
 add_executable(run_tests
   tests/TestMain.cpp
-  tests/dsp/adsr_test.cpp
-  tests/dsp/gain_test.cpp
+  tests/test_vm.cpp
   tests/dsp/sine_gen_test.cpp
   tests/dsp/voice_controller_test.cpp
-  tests/test_vm.cpp
+  tests/dsp/adsr_test.cpp
+  tests/dsp/gain_test.cpp
+  tests/parser/parser_test.cpp
+  src/dsp/module.cpp
+  src/dsp/sine_gen.cpp
   src/dsp/adsr.cpp
   src/dsp/audio_out.cpp
   src/dsp/gain.cpp
-  src/dsp/module.cpp
-  src/dsp/sine_gen.cpp
   src/dsp/voice_controller.cpp
   src/parser/parser.cpp
   src/vm/vm.cpp
   ${SRC_FILES}
 )
 target_include_directories(run_tests PRIVATE external/madronalib/Tests)
+# Define the path to test data
+target_compile_definitions(run_tests PRIVATE "TEST_DATA_DIR=\"${CMAKE_SOURCE_DIR}/examples\"")
 # Link madronalib
 target_link_libraries(run_tests madronalib)

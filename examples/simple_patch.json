@@ -1,11 +1,37 @@
 {
-  "nodes": {
-    "osc1": { "type": "osc.sine", "params": { "freq": 440 } },
-    "gain1": { "type": "gain", "params": { "amp": 0.5 } },
-    "out": { "type": "output" }
-  },
+  "modules": [
+    {
+      "id": 1,
+      "name": "sine_osc",
+      "data": {
+        "freq": 440.0
+      }
+    },
+    {
+      "id": 2,
+      "name": "gain",
+      "data": {
+        "gain": 0.5
+      }
+    },
+    {
+      "id": 3,
+      "name": "audio_out",
+      "data": {}
+    }
+  ],
   "connections": [
-    { "from": ["osc1", "out"], "to": ["gain1", "in"] },
-    { "from": ["gain1", "out"], "to": ["out", "in"] }
+    {
+      "from": "1:out",
+      "to": "2:in"
+    },
+    {
+      "from": "2:out",
+      "to": "3:in_l"
+    },
+    {
+      "from": "2:out",
+      "to": "3:in_r"
+    }
   ]
 }
