@@ -40,7 +40,7 @@ A subtractive synth is built from a few key components:
 ## 3. Phase 2: Comprehensive `madronalib` Integration
 With a basic synth in place, the next phase is to systematically wrap the remaining `madronalib` functionality.
 ### Category 1: Generators (`MLDSPGens.h`)
-- `SineOsc`: Sine wave oscillator. (Wraps `ml::SineGen`)
+- `SineGen`: Sine wave oscillator. (Wraps `ml::SineGen`)
 - `NoiseGen`: White noise generator. (Wraps `ml::NoiseGen`)
 - `ImpulseGen`: Band-limited impulse generator. (Wraps `ml::ImpulseGen`)
 ### Category 2: Filters (`MLDSPFilters.h`)

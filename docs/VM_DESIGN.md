@@ -101,9 +101,9 @@ The following table outlines the planned module IDs based on the latest audit.
 | `0x000` | `NoteIn` | `EventsToSignals` | Converts note events to control signals. |
 | `0x001` | `AudioOut` | `n/a` | Final audio output sink. (VM-internal concept) |
 | **Category 1** | **Generators** | `MLDSPGens.h` | |
-| `0x100` | `SineOsc` | `SineGen` | Sine wave oscillator. |
-| `0x101` | `SawOsc` | `phasorToSaw` | Sawtooth wave oscillator. |
-| `0x102` | `PulseOsc` | `phasorToPulse` | Pulse wave oscillator. |
+| `0x100` | `SineGen` | `SineGen` | Sine wave oscillator. |
+| `0x101` | `SawGen` | `phasorToSaw` | Sawtooth wave oscillator. |
+| `0x102` | `PulseGen` | `phasorToPulse` | Pulse wave oscillator. |
 | `0x103` | `NoiseGen` | `NoiseGen` | White noise generator. |
 | `0x104` | `ImpulseGen`| `ImpulseGen` | Band-limited impulse generator. |
 | **Category 2** | **Filters** | `MLDSPFilters.h` | |
