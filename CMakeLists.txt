@@ -37,6 +37,7 @@ add_executable(run_tests
   src/dsp/voice_controller.cpp
   src/parser/parser.cpp
   src/compiler/compiler.cpp
+  src/compiler/module_registry.cpp
   src/vm/vm.cpp
   ${SRC_FILES}
 )
