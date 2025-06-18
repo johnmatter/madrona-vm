@@ -1,0 +1,28 @@
+{
+  "modules": [
+    {
+      "name": "sine_osc",
+      "id": 256,
+      "info": {
+        "inputs": ["freq"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "gain",
+      "id": 1025,
+      "info": {
+        "inputs": ["in", "gain"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "audio_out",
+      "id": 1,
+      "info": {
+        "inputs": ["in_l", "in_r"],
+        "outputs": []
+      }
+    }
+  ]
+} 

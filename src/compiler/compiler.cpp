@@ -62,9 +62,8 @@ std::vector<uint32_t> Compiler::topological_sort(const PatchGraph& graph) {
     }
     return sorted_nodes;
 }
-std::vector<uint32_t> Compiler::compile(const PatchGraph& graph) {
+std::vector<uint32_t> Compiler::compile(const PatchGraph& graph, const ModuleRegistry& registry) {
     auto sorted_node_ids = topological_sort(graph);
-    ModuleRegistry registry;
     std::vector<uint32_t> instructions;
     // Maps a module's output port {node_id, port_name} to a register index.
     std::map<std::pair<uint32_t, std::string>, uint32_t> port_to_reg_map;
@@ -139,4 +138,4 @@ std::vector<uint32_t> Compiler::compile(const PatchGraph& graph) {
     final_bytecode.insert(final_bytecode.end(), instructions.begin(), instructions.end());
     return final_bytecode;
 }
-} // namespace madronavm 
+} // namespace madronavm

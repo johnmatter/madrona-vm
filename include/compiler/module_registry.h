@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <cstdint>
+#include <string_view>
 namespace madronavm {
 // Describes the inputs and outputs of a module.
 // In the future, this could be loaded from configuration files.
@@ -13,7 +14,7 @@ struct ModuleInfo {
 // A registry to map module names to stable IDs and provide metadata.
 class ModuleRegistry {
 public:
-    ModuleRegistry();
+    explicit ModuleRegistry(std::string_view json_path);
     // Gets the stable ID for a given module name. Throws if not found.
     uint32_t get_id(const std::string& name) const;
     // Gets the port information for a given module name. Throws if not found.

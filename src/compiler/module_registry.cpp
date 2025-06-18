@@ -1,19 +1,61 @@
 #include "compiler/module_registry.h"
+#include "cJSON.h"
 #include <stdexcept>
+#include <fstream>
+#include <sstream>
+#include <vector>
 namespace madronavm {
-ModuleRegistry::ModuleRegistry() {
-    // Populate the registry with module data based on the design spec
-    // and the modules present in `simple_patch.json`.
-    // --- Module IDs ---
-    // Note: 'sine_osc' from the patch maps to 'SineGen' from the spec.
-    // 'gain' maps to 'Multiply'.
-    name_to_id["sine_osc"] = 0x100;
-    name_to_id["gain"] = 0x401;
-    name_to_id["audio_out"] = 0x001;
-    // --- Module Port Information ---
-    name_to_info["sine_osc"] = { {"freq"}, {"out"} };
-    name_to_info["gain"] = { {"in", "gain"}, {"out"} };
-    name_to_info["audio_out"] = { {"in_l", "in_r"}, {} };
+ModuleRegistry::ModuleRegistry(std::string_view json_path) {
+    std::ifstream t(json_path.data());
+    if (!t.is_open()) {
+        throw std::runtime_error(std::string("Failed to open module registry file: ") + json_path.data());
+    }
+    std::string str((std::istreambuf_iterator<char>(t)),
+                    std::istreambuf_iterator<char>());
+    cJSON* root = cJSON_Parse(str.c_str());
+    if (!root) {
+        throw std::runtime_error("Failed to parse module registry JSON");
+    }
+    cJSON* modules = cJSON_GetObjectItem(root, "modules");
+    if (!modules || modules->type != cJSON_Array) {
+        cJSON_Delete(root);
+        throw std::runtime_error("Invalid module registry format: 'modules' array not found.");
+    }
+    int module_count = cJSON_GetArraySize(modules);
+    for (int i = 0; i < module_count; ++i) {
+        cJSON* module_item = cJSON_GetArrayItem(modules, i);
+        if (!module_item) continue;
+        cJSON* name_item = cJSON_GetObjectItem(module_item, "name");
+        cJSON* id_item = cJSON_GetObjectItem(module_item, "id");
+        cJSON* info_item = cJSON_GetObjectItem(module_item, "info");
+        if (!name_item || !id_item || !info_item || name_item->type != cJSON_String) {
+             continue; // Skip malformed entries
+        }
+        std::string name = name_item->valuestring;
+        uint32_t id = id_item->valueint;
+        ModuleInfo info;
+        cJSON* inputs = cJSON_GetObjectItem(info_item, "inputs");
+        if (inputs && inputs->type == cJSON_Array) {
+            for (int j = 0; j < cJSON_GetArraySize(inputs); ++j) {
+                cJSON* input_item = cJSON_GetArrayItem(inputs, j);
+                if (input_item && input_item->type == cJSON_String) {
+                    info.inputs.push_back(input_item->valuestring);
+                }
+            }
+        }
+        cJSON* outputs = cJSON_GetObjectItem(info_item, "outputs");
+        if (outputs && outputs->type == cJSON_Array) {
+            for (int j = 0; j < cJSON_GetArraySize(outputs); ++j) {
+                cJSON* output_item = cJSON_GetArrayItem(outputs, j);
+                if (output_item && output_item->type == cJSON_String) {
+                    info.outputs.push_back(output_item->valuestring);
+                }
+            }
+        }
+        name_to_id[name] = id;
+        name_to_info[name] = info;
+    }
+    cJSON_Delete(root);
 }
 uint32_t ModuleRegistry::get_id(const std::string& name) const {
     auto it = name_to_id.find(name);

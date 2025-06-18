@@ -44,5 +44,6 @@ add_executable(run_tests
 target_include_directories(run_tests PRIVATE external/madronalib/Tests)
 # Define the path to test data
 target_compile_definitions(run_tests PRIVATE "TEST_DATA_DIR=\"${CMAKE_SOURCE_DIR}/examples\"")
+target_compile_definitions(run_tests PRIVATE "MODULE_DEFS_PATH=\"${CMAKE_SOURCE_DIR}/data/modules.json\"")
 # Link madronalib
 target_link_libraries(run_tests madronalib)
