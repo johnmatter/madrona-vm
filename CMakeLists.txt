@@ -28,6 +28,7 @@ add_executable(run_tests
   tests/dsp/adsr_test.cpp
   tests/dsp/gain_test.cpp
   tests/parser/parser_test.cpp
+  tests/compiler/compiler_test.cpp
   src/dsp/module.cpp
   src/dsp/sine_gen.cpp
   src/dsp/adsr.cpp
@@ -35,6 +36,7 @@ add_executable(run_tests
   src/dsp/gain.cpp
   src/dsp/voice_controller.cpp
   src/parser/parser.cpp
+  src/compiler/compiler.cpp
   src/vm/vm.cpp
   ${SRC_FILES}
 )
