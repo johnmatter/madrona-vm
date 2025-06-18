@@ -22,13 +22,13 @@ std::vector<uint32_t> create_bytecode_header(uint32_t program_size, uint32_t num
 }
 TEST_CASE("VM Basic Construction", "[vm]") {
   ModuleRegistry registry(MODULE_DEFS_PATH);
-  VM vm(registry, 44100.0f);
+  VM vm(registry, 44100.0f, true); // testMode = true
   // VM should be constructible and not crash
   REQUIRE(true);
 }
 TEST_CASE("VM Load Invalid Bytecode", "[vm]") {
   ModuleRegistry registry(MODULE_DEFS_PATH);
-  VM vm(registry, 44100.0f);
+  VM vm(registry, 44100.0f, true); // testMode = true
   SECTION("Empty bytecode") {
     std::vector<uint32_t> empty_bytecode;
     vm.load_program(std::move(empty_bytecode));
@@ -52,7 +52,7 @@ TEST_CASE("VM Load Invalid Bytecode", "[vm]") {
 }
 TEST_CASE("VM LOAD_K Instruction", "[vm]") {
   ModuleRegistry registry(MODULE_DEFS_PATH);
-  VM vm(registry, 44100.0f);
+  VM vm(registry, 44100.0f, true); // testMode = true
   // Create bytecode: LOAD_K 0, 440.0f; END
   auto bytecode = create_bytecode_header(7, 1); // 4 header + 3 instruction words
   bytecode.push_back(static_cast<uint32_t>(OpCode::LOAD_K));
@@ -68,7 +68,7 @@ TEST_CASE("VM LOAD_K Instruction", "[vm]") {
 }
 TEST_CASE("VM PROC Instruction - Sine Oscillator", "[vm]") {
   ModuleRegistry registry(MODULE_DEFS_PATH);
-  VM vm(registry, 44100.0f);
+  VM vm(registry, 44100.0f, true); // testMode = true
   // Create bytecode that sets up a sine oscillator:
   // LOAD_K 0, 440.0f    (load frequency into register 0)
   // PROC 256, 1, 1, 0, 1 (sine_osc: 1 input from reg 0, 1 output to reg 1)
@@ -96,7 +96,7 @@ TEST_CASE("VM PROC Instruction - Sine Oscillator", "[vm]") {
 }
 TEST_CASE("VM PROC Instruction - Gain Module", "[vm]") {
   ModuleRegistry registry(MODULE_DEFS_PATH);
-  VM vm(registry, 44100.0f);
+  VM vm(registry, 44100.0f, true); // testMode = true
   // Create bytecode that sets up signal processing chain:
   // LOAD_K 0, 1.0f      (load signal into register 0)
   // LOAD_K 1, 0.5f      (load gain into register 1)  
@@ -130,7 +130,7 @@ TEST_CASE("VM PROC Instruction - Gain Module", "[vm]") {
 }
 TEST_CASE("VM Unknown Module ID", "[vm]") {
   ModuleRegistry registry(MODULE_DEFS_PATH);
-  VM vm(registry, 44100.0f);
+  VM vm(registry, 44100.0f, true); // testMode = true
   // Create bytecode with unknown module ID
   auto bytecode = create_bytecode_header(9, 2);
   // LOAD_K 0, 1.0f
@@ -160,7 +160,7 @@ TEST_CASE("VM Unknown Module ID", "[vm]") {
 }
 TEST_CASE("VM Unknown Opcode", "[vm]") {
   ModuleRegistry registry(MODULE_DEFS_PATH);
-  VM vm(registry, 44100.0f);
+  VM vm(registry, 44100.0f, true); // testMode = true
   // Create bytecode with unknown opcode
   auto bytecode = create_bytecode_header(5, 1);
   bytecode.push_back(0xACABACAB); // Unknown opcode
@@ -173,7 +173,7 @@ TEST_CASE("VM Unknown Opcode", "[vm]") {
 }
 TEST_CASE("VM Complex Signal Chain - Sine -> Gain", "[vm]") {
   ModuleRegistry registry(MODULE_DEFS_PATH);
-  VM vm(registry, 44100.0f);
+  VM vm(registry, 44100.0f, true); // testMode = true
   // Create bytecode that chains sine oscillator -> gain:
   // LOAD_K 0, 440.0f       (load frequency into register 0)
   // PROC 256, 1, 1, 0, 1   (sine_osc: freq from reg 0, output to reg 1)

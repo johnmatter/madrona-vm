@@ -6,7 +6,7 @@
 #include <memory>
 class AudioOut : public DSPModule {
 public:
-  explicit AudioOut(float sampleRate);
+  explicit AudioOut(float sampleRate, bool testMode = false);
   ~AudioOut() override;
   // Delete copy and move constructors.
   // This class manages unique hardware resources via unique_ptr, so creating copies might be weird.
@@ -23,4 +23,6 @@ private:
   // A thread-safe ring buffer to pass data from the VM's
   // process() thread to the audio hardware's callback thread.
   ml::DSPBuffer mRingBuffer;
+  bool mTestMode;
+  int mDroppedSampleCount;
 };

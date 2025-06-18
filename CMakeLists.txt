@@ -23,6 +23,7 @@ file(GLOB_RECURSE SRC_FILES
 add_executable(run_tests
   tests/TestMain.cpp
   tests/test_vm.cpp
+  tests/end_to_end_test.cpp
   tests/dsp/sine_gen_test.cpp
   tests/dsp/voice_controller_test.cpp
   tests/dsp/adsr_test.cpp
@@ -47,3 +48,21 @@ target_compile_definitions(run_tests PRIVATE "TEST_DATA_DIR=\"${CMAKE_SOURCE_DIR
 target_compile_definitions(run_tests PRIVATE "MODULE_DEFS_PATH=\"${CMAKE_SOURCE_DIR}/data/modules.json\"")
 # Link madronalib
 target_link_libraries(run_tests madronalib)
+# Create demo executable
+add_executable(simple_vm_demo
+  examples/simple_vm_demo.cpp
+  src/parser/parser.cpp
+  src/compiler/compiler.cpp
+  src/compiler/module_registry.cpp
+  src/vm/vm.cpp
+  src/dsp/module.cpp
+  src/dsp/sine_gen.cpp
+  src/dsp/adsr.cpp
+  src/dsp/audio_out.cpp
+  src/dsp/gain.cpp
+  src/dsp/voice_controller.cpp
+  ${SRC_FILES}
+)
+target_include_directories(simple_vm_demo PRIVATE external/madronalib/Tests)
+target_compile_definitions(simple_vm_demo PRIVATE "MODULE_DEFS_PATH=\"${CMAKE_SOURCE_DIR}/data/modules.json\"")
+target_link_libraries(simple_vm_demo madronalib)

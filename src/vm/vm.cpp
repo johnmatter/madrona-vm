@@ -6,8 +6,8 @@
 #include "dsp/audio_out.h"
 #include <iostream>
 namespace madronavm {
-VM::VM(const ModuleRegistry& registry, float sampleRate) 
-  : m_registry(registry), m_sampleRate(sampleRate) {}
+VM::VM(const ModuleRegistry& registry, float sampleRate, bool testMode) 
+  : m_registry(registry), m_sampleRate(sampleRate), m_testMode(testMode) {}
 VM::~VM() {}
 std::unique_ptr<DSPModule> VM::create_module(uint32_t module_id) {
   // Map module IDs to their implementations based on data/modules.json
@@ -17,7 +17,7 @@ std::unique_ptr<DSPModule> VM::create_module(uint32_t module_id) {
     case 1025: // gain  
       return std::make_unique<::Gain>(m_sampleRate);
     case 1: // audio_out
-      return std::make_unique<::AudioOut>(m_sampleRate);
+      return std::make_unique<::AudioOut>(m_sampleRate, m_testMode);
     default:
       throw std::runtime_error("Unknown module ID: " + std::to_string(module_id));
   }

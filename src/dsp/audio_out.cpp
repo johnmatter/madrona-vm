@@ -6,13 +6,21 @@
 constexpr int kOutputChannels = 2;
 // 16 blocks of buffer
 constexpr int kRingBufferFrames = kFloatsPerDSPVector * 16;
-AudioOut::AudioOut(float sampleRate) : DSPModule(sampleRate) {
+AudioOut::AudioOut(float sampleRate, bool testMode) 
+  : DSPModule(sampleRate), mTestMode(testMode), mDroppedSampleCount(0) {
   mRingBuffer.resize(kRingBufferFrames * kOutputChannels);
-  mContext = std::make_unique<ml::AudioContext>(0, kOutputChannels, static_cast<int>(sampleRate));
-  mAudioTask = std::make_unique<ml::AudioTask>(mContext.get(), audioCallback, this);
-  mAudioTask->startAudio();
+  if (!mTestMode) {
+    // Only start real audio in non-test mode
+    mContext = std::make_unique<ml::AudioContext>(0, kOutputChannels, static_cast<int>(sampleRate));
+    mAudioTask = std::make_unique<ml::AudioTask>(mContext.get(), audioCallback, this);
+    mAudioTask->startAudio();
+  }
 }
-AudioOut::~AudioOut() { mAudioTask->stopAudio(); }
+AudioOut::~AudioOut() { 
+  if (mAudioTask) {
+    mAudioTask->stopAudio(); 
+  }
+}
 void AudioOut::process(const float **inputs, float **outputs) {
   const float *left = inputs[0];
   const float *right = inputs[1];
@@ -25,9 +33,17 @@ void AudioOut::process(const float **inputs, float **outputs) {
     }
     mRingBuffer.write(interleaved, samples);
   } else {
-    // Buffer is full, drop samples and log.
-    // TODO: handle dropped samples more gracefully.
-    std::cerr << "AudioOut: Ring buffer full, dropping samples!" << std::endl;
+    // Buffer is full, drop samples
+    mDroppedSampleCount += samples;
+    if (mTestMode) {
+      // In test mode, only log occasionally to avoid spam
+      if (mDroppedSampleCount % (samples * 100) == 0) {
+        std::cerr << "AudioOut: Test mode - dropped " << mDroppedSampleCount << " samples total" << std::endl;
+      }
+    } else {
+      // In real mode, log each drop
+      std::cerr << "AudioOut: Ring buffer full, dropping samples!" << std::endl;
+    }
   }
 }
 void AudioOut::audioCallback(ml::AudioContext *ctx, void *state) {
