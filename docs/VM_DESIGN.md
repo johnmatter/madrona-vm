@@ -180,4 +180,42 @@ The primary goal is to allow older patches to run on newer versions of the VM.
 1.  **JSON Versioning**: The `version` field in `simple_patch.json` is the primary switch for compatibility. When the JSON schema changes in a non-backward-compatible way, this version number **must** be incremented. The parser will be responsible for understanding older versions and converting them into the latest `PatchGraph` representation.
 2.  **Bytecode Header**: The bytecode buffer itself will contain a header to ensure the VM doesn't execute an incompatible program. The layout will be:
     *   `word 0`: Magic Number (e.g., `0xMADRONA_`) to identify the bytecode format.
-    *   `word 1`: Bytecode Version (e.g., `1`
+    *   `word 1`: Bytecode Version (e.g., `1`).
+    *   `word 2`: Program size in 32-bit words, including the header.
+    *   `word 3`: Number of `DSPVector` registers required for execution.
+## 8. Implementation Plan
+This section outlines a recommended, step-by-step approach to building the VM system. The strategy is to build and test each component in a logical order, from parsing the input patch to generating the final audio output.
+### Step 1: Finalize `PatchGraph` and Implement the Parser
+The first step is to be able to load a patch description into a structured, in-memory representation.
+*   **Action**: Define the C++ structs for `PatchGraph`, `Node`, and `Connection` in `include/parser/parser.h`, matching the specification in this document.
+*   **Action**: Implement the parser logic in `src/parser/parser.cpp`. This function should take a JSON string, use the `cJSON` library (available via `madronalib`), and populate an instance of the `PatchGraph` struct.
+*   **Goal**: A function that can successfully parse `examples/simple_patch.json` into a valid `PatchGraph` object.
+### Step 2: Create the Compiler and Implement Topological Sort
+The compiler's first responsibility is to determine a linear execution order from the patch graph.
+*   **Action**: Create new files: `include/compiler/compiler.h` and `src/compiler/compiler.cpp`.
+*   **Action**: In the new compiler class, implement a method that performs a topological sort on the nodes of the `PatchGraph`.
+*   **Goal**: A method that takes a `PatchGraph` and returns a `std::vector<uint32_t>` of node IDs in the correct processing order. This can be unit-tested independently.
+### Step 3: Implement the Compiler's Bytecode Generation
+With the execution order determined, the compiler can translate the graph into bytecode.
+*   **Action**: Extend the compiler to manage memory allocation for the VM's registers. It will need to map the output of each module to a specific register index.
+*   **Action**: Implement the main compilation logic. This will iterate through the sorted nodes and emit the corresponding bytecode instructions (`LOAD_K`, `PROC`, `END`) into a `std::vector<uint32_t>`.
+*   **Goal**: A compiler that can transform a `PatchGraph` object into a complete, valid bytecode buffer.
+### Step 4: Flesh out the VM's Structure and Execution Loop
+Now we build the engine that will run the bytecode.
+*   **Action**: Implement the `VM` class in `include/vm/vm.h` and `src/vm/vm.cpp` according to the C++ interface specified in this document. This includes the `m_bytecode` vector, the `m_registers` pool for `DSPVector`s, and the thread-safe `load_program` method.
+*   **Action**: Implement the main `process` method's execution loop with a program counter (`pc`) and a `switch` statement to interpret opcodes.
+*   **Goal**: A VM that can load a bytecode buffer and step through the instructions, even if the `PROC` instruction is not yet fully functional.
+### Step 5: Create the Module Registry and Integrate DSP Modules
+The `PROC` instruction needs a way to find and execute the actual DSP code.
+*   **Action**: Implement the "Module Registry" as a central map connecting stable module IDs (e.g., `0x100` for `SineGen`) to their corresponding C++ `DSPModule` objects.
+*   **Action**: Connect the VM's `PROC` instruction handler to this registry. The handler will use the `module_id` operand to look up the correct module, gather the specified input/output registers, and call its `process` method.
+*   **Goal**: A VM that can fully execute a patch, processing audio by calling the appropriate DSP modules in the correct order.
+### Step 6: End-to-End Integration and Testing
+The final step is to tie everything together and verify the system works as a whole.
+*   **Action**: Create a new test or example application that:
+    1.  Loads `examples/simple_patch.json`.
+    2.  Uses the **Parser** to create the `PatchGraph`.
+    3.  Uses the **Compiler** to generate bytecode.
+    4.  Loads the bytecode into the **VM**.
+    5.  Calls the VM's `process` method in a loop and verifies the audio output.
+*   **Goal**: A working, testable, end-to-end audio processing pipeline based on the full design.
