@@ -19,6 +19,10 @@ include_directories(external/madronalib/external/cJSON)
 file(GLOB_RECURSE SRC_FILES
   "src/dsp/*.cpp"
 )
+# Collect audio utility source files
+file(GLOB_RECURSE AUDIO_FILES
+  "src/audio/*.cpp"
+)
 # Create test executable
 add_executable(run_tests
   tests/TestMain.cpp
@@ -41,6 +45,7 @@ add_executable(run_tests
   src/compiler/module_registry.cpp
   src/vm/vm.cpp
   ${SRC_FILES}
+  ${AUDIO_FILES}
 )
 target_include_directories(run_tests PRIVATE external/madronalib/Tests)
 # Define the path to test data
@@ -62,7 +67,16 @@ add_executable(simple_vm_demo
   src/dsp/gain.cpp
   src/dsp/voice_controller.cpp
   ${SRC_FILES}
+  ${AUDIO_FILES}
 )
 target_include_directories(simple_vm_demo PRIVATE external/madronalib/Tests)
 target_compile_definitions(simple_vm_demo PRIVATE "MODULE_DEFS_PATH=\"${CMAKE_SOURCE_DIR}/data/modules.json\"")
 target_link_libraries(simple_vm_demo madronalib)
+# Create device selection demo executable
+add_executable(device_selection_demo
+  examples/device_selection_demo.cpp
+  src/dsp/audio_out.cpp
+  src/dsp/module.cpp
+  ${AUDIO_FILES}
+)
+target_link_libraries(device_selection_demo madronalib)

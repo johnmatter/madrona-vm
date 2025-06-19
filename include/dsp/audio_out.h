@@ -3,16 +3,20 @@
 #include "madronalib.h"
 #include "MLAudioTask.h"
 #include "MLDSPBuffer.h"
+#include "audio/device_info.h"
 #include <memory>
 #include <functional>
+#include <vector>
+#include <string>
 // Forward-declare madronalib types
 namespace ml {
   class DSPVectorDynamic;
   class AudioContext;
+  class CustomAudioTask;
 }
 class AudioOut : public DSPModule {
 public:
-  explicit AudioOut(float sampleRate, bool testMode = false);
+  explicit AudioOut(float sampleRate, bool testMode = false, unsigned int deviceId = 0);
   ~AudioOut() override;
   // Delete copy and move constructors.
   // This class manages unique hardware resources via unique_ptr, so creating copies might be weird.
@@ -23,10 +27,19 @@ public:
   AudioOut& operator=(const AudioOut&) = delete;
   void process(const float** inputs, float** outputs) override;
   void setVMCallback(std::function<void(float**, int)> callback);
+  // Device selection functionality (delegated to AudioDeviceManager)
+  static std::vector<AudioDeviceInfo> getAvailableDevices() {
+    return AudioDeviceManager::getAvailableDevices();
+  }
+  static unsigned int getDefaultOutputDevice() {
+    return AudioDeviceManager::getDefaultOutputDevice();
+  }
+  unsigned int getCurrentDevice() const { return mDeviceId; }
 private:
   void audioCallback(ml::AudioContext* ctx);
   std::unique_ptr<ml::AudioContext> mContext;
-  std::unique_ptr<ml::AudioTask> mAudioTask;
+  std::unique_ptr<ml::CustomAudioTask> mCustomAudioTask;
   std::function<void(float**, int)> vmCallback_;
   bool mTestMode;
+  unsigned int mDeviceId;
 };

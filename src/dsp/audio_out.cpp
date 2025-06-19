@@ -2,29 +2,44 @@
 #include "MLDSPMath.h" // for kFloatsPerDSPVector
 #include "MLDSPOps.h"
 #include "MLAudioContext.h"
+#include "audio/custom_audio_task.h"
+#include "audio/device_info.h"
 #include <iostream>
 #include <vector>
+/*
+ * Audio Device Selection Implementation Notes:
+ *
+ * madronalib's AudioTask hardcodes device selection to use getDefaultOutputDevice().
+ * To add device selection without modifying madronalib code, we use a CustomAudioTask
+ * that replicates the essential functionality of ml::AudioTask but with device selection.
+ *
+ * This approach:
+ * - Maintains compatibility with existing AudioOut interface
+ * - Allows specifying audio output device via constructor parameter
+ * - Provides static methods to enumerate and query available devices
+ * - Uses the same RtAudio and SignalProcessBuffer infrastructure as madronalib
+ */
 using namespace ml;
-// I believe constexpr keeps the scope of these variables local to this file
 constexpr int kOutputChannels = 2;
-AudioOut::AudioOut(float sampleRate, bool testMode)
-    : DSPModule(sampleRate), mTestMode(testMode) {
+AudioOut::AudioOut(float sampleRate, bool testMode, unsigned int deviceId)
+    : DSPModule(sampleRate), mTestMode(testMode), mDeviceId(deviceId) {
   if (!mTestMode) {
-    // Only start real audio in non-test mode
+    // Create context and custom audio task with device selection
     mContext = std::make_unique<ml::AudioContext>(0, kOutputChannels,
                                                  static_cast<int>(sampleRate));
-    mAudioTask = std::make_unique<ml::AudioTask>(
+    // Create custom audio task
+    mCustomAudioTask = std::make_unique<ml::CustomAudioTask>(
         mContext.get(),
-        [](ml::AudioContext* ctx, void *state) {
-          static_cast<AudioOut *>(state)->audioCallback(ctx);
+        [this](ml::AudioContext* ctx) {
+          this->audioCallback(ctx);
         },
-        this);
-    mAudioTask->startAudio();
+        deviceId);
+    mCustomAudioTask->startAudio();
   }
 }
 AudioOut::~AudioOut() {
-  if (mAudioTask) {
-    mAudioTask->stopAudio();
+  if (mCustomAudioTask) {
+    mCustomAudioTask->stopAudio();
   }
 }
 void AudioOut::process(const float **inputs, float **outputs) {
