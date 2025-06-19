@@ -6,6 +6,8 @@
 #include <cstring>
 using namespace madronavm;
 // Helper function to bit-cast float to uint32_t for bytecode
+// We use use memcpy to copy the raw 32 bits from the float variable directly into the uint32_t variable, byte for byte.
+// Later, the VM will reverse this when it executes LOAD_K, yielding the original float value.
 uint32_t float_to_uint32(float value) {
   uint32_t result;
   std::memcpy(&result, &value, sizeof(float));
