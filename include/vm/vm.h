@@ -16,6 +16,8 @@ public:
   // Execute the currently loaded program for one block of audio.
   // This is called from the real-time audio thread.
   void process(const float **inputs, float **outputs, int num_frames);
+  // Process a block of audio. This is the new entry point from the audio thread.
+  void processBlock(float** outputs, int blockSize);
 private:
   const ModuleRegistry& m_registry;
   float m_sampleRate;

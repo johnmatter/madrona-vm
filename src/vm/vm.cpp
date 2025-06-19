@@ -17,7 +17,11 @@ std::unique_ptr<DSPModule> VM::create_module(uint32_t module_id) {
     case 1025: // gain  
       return std::make_unique<::Gain>(m_sampleRate);
     case 1: // audio_out
-      return std::make_unique<::AudioOut>(m_sampleRate, m_testMode);
+      // The VM should not create a real audio driver. The main application
+      // will create the "real" AudioOut module and link it to the VM.
+      // We create one in test mode here so it exists as a module instance,
+      // but it won't try to open an audio device.
+      return std::make_unique<::AudioOut>(m_sampleRate, true);
     default:
       throw std::runtime_error("Unknown module ID: " + std::to_string(module_id));
   }
@@ -46,8 +50,19 @@ void VM::load_program(std::vector<uint32_t> new_bytecode) {
   }
   m_registers.resize(header->num_registers);
 }
+void VM::processBlock(float** outputs, int blockSize) {
+    // For now, we ignore inputs and assume blockSize matches kFloatsPerDSPVector
+    this->process(nullptr, outputs, blockSize);
+}
 void VM::process(const float **inputs, float **outputs, int num_frames) {
   if (m_bytecode.empty()) {
+    // If there's no program, we should probably output silence.
+    if(outputs && outputs[0] && outputs[1]) {
+        for(int i=0; i<num_frames; ++i) {
+            outputs[0][i] = 0.f;
+            outputs[1][i] = 0.f;
+        }
+    }
     return;
   }
   size_t pc = sizeof(BytecodeHeader) / sizeof(uint32_t);
@@ -81,6 +96,14 @@ void VM::process(const float **inputs, float **outputs, int num_frames) {
       for (uint32_t i = 0; i < num_outputs; ++i) {
         uint32_t reg_idx = m_bytecode[pc + 4 + num_inputs + i];
         output_ptrs[i] = m_registers[reg_idx].getBuffer();
+      }
+      // If this is the audio_out module, we need to connect its outputs
+      // to the main output buffers provided to the VM.
+      constexpr uint32_t AUDIO_OUT_ID = 1;
+      if (module_id == AUDIO_OUT_ID && outputs) {
+          for(uint32_t i=0; i<num_outputs && outputs[i]; ++i) {
+              output_ptrs[i] = outputs[i];
+          }
       }
       // Call the module's process method
       m_module_instances[module_id]->process(input_ptrs.data(), output_ptrs.data());

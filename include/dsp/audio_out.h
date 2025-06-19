@@ -4,6 +4,12 @@
 #include "MLAudioTask.h"
 #include "MLDSPBuffer.h"
 #include <memory>
+#include <functional>
+// Forward-declare madronalib types
+namespace ml {
+  class DSPVectorDynamic;
+  class AudioContext;
+}
 class AudioOut : public DSPModule {
 public:
   explicit AudioOut(float sampleRate, bool testMode = false);
@@ -16,13 +22,11 @@ public:
   AudioOut(const AudioOut&) = delete;
   AudioOut& operator=(const AudioOut&) = delete;
   void process(const float** inputs, float** outputs) override;
+  void setVMCallback(std::function<void(float**, int)> callback);
 private:
-  static void audioCallback(ml::AudioContext* ctx, void* state);
+  void audioCallback(ml::AudioContext* ctx);
   std::unique_ptr<ml::AudioContext> mContext;
   std::unique_ptr<ml::AudioTask> mAudioTask;
-  // A thread-safe ring buffer to pass data from the VM's
-  // process() thread to the audio hardware's callback thread.
-  ml::DSPBuffer mRingBuffer;
+  std::function<void(float**, int)> vmCallback_;
   bool mTestMode;
-  int mDroppedSampleCount;
 };

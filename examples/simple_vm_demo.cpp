@@ -15,6 +15,7 @@
 #include "compiler/module_registry.h"
 #include "vm/vm.h"
 #include "vm/opcodes.h"
+#include "dsp/audio_out.h"
 #include <iostream>
 #include <fstream>
 #include <chrono>
@@ -82,10 +83,17 @@ int main(int argc, char* argv[]) {
     // === STEP 5: Play audio ===
     std::cout << "Step 5: Playing audio for 5 seconds..." << std::endl;
     std::cout << "  (The VM will be driven by the audio callback at the correct rate)" << std::endl;
+    // Create the audio driver and link it to the VM
+    AudioOut audio_out_driver(44100.0f, false); // false = not test mode
+    audio_out_driver.setVMCallback(
+      [&vm](float** outputs, int blockSize){
+        vm.processBlock(outputs, blockSize);
+      }
+    );
     const int play_duration_seconds = 5;
     std::cout << "  ♪ Audio started - you should hear a 440Hz sine wave" << std::endl;
-    // Let the audio play - the madronalib AudioTask will drive the VM processing
-    // at the correct real-time rate via the audio callback
+    // Let the audio play - our explicit AudioOut instance will drive the VM processing
+    // at the correct real-time rate via its audio callback.
     std::this_thread::sleep_for(std::chrono::seconds(play_duration_seconds));
     std::cout << "  ✓ Audio playback completed" << std::endl;
     std::cout << "\n=== End-to-End Demo Completed Successfully! ===" << std::endl;
