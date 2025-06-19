@@ -1,11 +1,13 @@
 #include "dsp/adsr.h"
 #include "MLDSPOps.h" // For kFloatsPerDSPVector
 #include <algorithm> // for std::max
+#include "dsp/validation.h"
+using namespace madronavm;
 ADSR::ADSR(float sampleRate) : DSPModule(sampleRate) {
     mADSR.clear();
 }
 void ADSR::process(const float** inputs, int num_inputs, float** outputs, int num_outputs) {
-    if (num_inputs < 5 || num_outputs < 1) return;
+    if (!dsp::validate_ports("ADSR", num_inputs, inputs, {0, 1, 2, 3, 4}, num_outputs, 1)) return;
     const float* gateIn = inputs[0];
     const float* attackIn = inputs[1];
     const float* decayIn = inputs[2];

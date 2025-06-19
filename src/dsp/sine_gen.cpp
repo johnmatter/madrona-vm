@@ -1,6 +1,7 @@
 // Sine oscillator using madronalib
 #include "dsp/sine_gen.h"
 #include "MLDSPGens.h"
+#include "dsp/validation.h"
 struct SineGen::impl {
   ml::SineGen mOsc;
 };
@@ -11,7 +12,7 @@ SineGen::~SineGen() {
   delete pImpl;
 }
 void SineGen::process(const float** inputs, int num_inputs, float** outputs, int num_outputs) {
-  if (num_inputs < 1) return; // Should always have a frequency input
+  if (!madronavm::dsp::validate_ports("SineGen", num_inputs, inputs, {0}, num_outputs, 1)) return;
   const float freq = inputs[0][0];
   const float sr = mSampleRate;
   // get frequency as cycles/sample

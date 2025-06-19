@@ -9,7 +9,9 @@
 #include "dsp/add.h"
 #include "dsp/mul.h"
 #include <iostream>
+#include <limits>
 namespace madronavm {
+constexpr uint32_t kNullRegister = std::numeric_limits<uint32_t>::max();
 VM::VM(const ModuleRegistry& registry, float sampleRate, bool testMode) 
   : m_registry(registry), m_sampleRate(sampleRate), m_testMode(testMode) {}
 VM::~VM() {}
@@ -107,7 +109,11 @@ void VM::process(const float **inputs, float **outputs, int num_frames) {
       std::vector<const float*> input_ptrs(num_inputs);
       for (uint32_t i = 0; i < num_inputs; ++i) {
         uint32_t reg_idx = m_bytecode[pc + 4 + i];
-        input_ptrs[i] = m_registers[reg_idx].getConstBuffer();
+        if (reg_idx == kNullRegister) {
+            input_ptrs[i] = nullptr;
+        } else {
+            input_ptrs[i] = m_registers[reg_idx].getConstBuffer();
+        }
       }
       // Gather output register pointers  
       std::vector<float*> output_ptrs(num_outputs);
