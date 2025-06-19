@@ -22,7 +22,7 @@ file(GLOB_RECURSE SRC_FILES
 # Create test executable
 add_executable(run_tests
   tests/TestMain.cpp
-  tests/test_vm.cpp
+  tests/vm/vm_test.cpp
   tests/integration_test.cpp
   tests/dsp/sine_gen_test.cpp
   tests/dsp/voice_controller_test.cpp
