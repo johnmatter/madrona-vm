@@ -118,12 +118,18 @@ std::vector<uint32_t> Compiler::compile(const PatchGraph& graph, const ModuleReg
             port_to_reg_map[{node.id, port_name}] = reg;
         }
         // --- 3. Emit PROC instruction ---
-        instructions.push_back(static_cast<uint32_t>(OpCode::PROC));
-        instructions.push_back(registry.get_id(node.name));
-        instructions.push_back(in_regs.size());
-        instructions.push_back(out_regs.size());
-        instructions.insert(instructions.end(), in_regs.begin(), in_regs.end());
-        instructions.insert(instructions.end(), out_regs.begin(), out_regs.end());
+        if (node.name == "audio_out") {
+            instructions.push_back(static_cast<uint32_t>(OpCode::AUDIO_OUT));
+            instructions.push_back(in_regs.size());
+            instructions.insert(instructions.end(), in_regs.begin(), in_regs.end());
+        } else {
+            instructions.push_back(static_cast<uint32_t>(OpCode::PROC));
+            instructions.push_back(registry.get_id(node.name));
+            instructions.push_back(in_regs.size());
+            instructions.push_back(out_regs.size());
+            instructions.insert(instructions.end(), in_regs.begin(), in_regs.end());
+            instructions.insert(instructions.end(), out_regs.begin(), out_regs.end());
+        }
     }
     instructions.push_back(static_cast<uint32_t>(OpCode::END));
     // --- 4. Prepend Header and return final bytecode ---

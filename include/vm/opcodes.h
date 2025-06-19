@@ -3,9 +3,11 @@
 namespace madronavm {
 // Using an enum class for type safety. The underlying type is uint32_t.
 enum class OpCode : uint32_t {
-    LOAD_K  = 0x01, // Operands: dest_reg, value (float bit-cast to u32)
-    PROC    = 0x02, // Operands: module_id, num_inputs, num_outputs, in_regs..., out_regs...
-    END     = 0xFF, // No operands
+    NO_OP = 0x00,
+    LOAD_K = 0x01,      // dest_reg, value
+    PROC = 0x02,        // module_id, num_inputs, num_outputs, [in_regs...], [out_regs...]
+    AUDIO_OUT = 0x03,   // num_inputs, [in_regs...]
+    END = 0xFF
 };
 // The magic number for identifying Madrona VM bytecode files. 'MADR' in ASCII.
 const uint32_t kMagicNumber = 0x4D414452;

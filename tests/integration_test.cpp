@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <atomic>
 #include <thread>
+#include <vector>
 #ifndef TEST_DATA_DIR
 #define TEST_DATA_DIR "examples"
 #endif
@@ -113,6 +114,46 @@ TEST_CASE("Integration Test: Real-time Audio Driver", "[integration][realtime]")
     REQUIRE(actual_blocks > 0);
     REQUIRE(actual_blocks >= lower_bound);
     REQUIRE(actual_blocks <= upper_bound);
+}
+TEST_CASE("Integration Test: VM Audio Output Verification", "[integration][vm]") {
+    SECTION("VM produces audible sine wave for simple_patch.json") {
+        // 1. Load and compile the patch
+        std::string patch_path(TEST_DATA_DIR);
+        patch_path += "/simple_patch.json";
+        std::ifstream patch_file(patch_path);
+        REQUIRE(patch_file.is_open());
+        std::string json_content((std::istreambuf_iterator<char>(patch_file)), std::istreambuf_iterator<char>());
+        patch_file.close();
+        auto graph = parse_json(json_content);
+        ModuleRegistry registry(MODULE_DEFS_PATH);
+        auto bytecode = Compiler::compile(graph, registry);
+        // 2. Setup VM
+        constexpr float sampleRate = 48000.0f;
+        VM vm(registry, sampleRate, true); // testMode = true
+        vm.load_program(std::move(bytecode));
+        // 3. Process one block
+        const int block_size = 64;
+        std::vector<float> out_l(block_size);
+        std::vector<float> out_r(block_size);
+        float* outputs[] = { out_l.data(), out_r.data() };
+        const float** inputs = nullptr;
+        vm.process(inputs, outputs, block_size);
+        // 4. Verify the output
+        // The first sample should not be zero.
+        REQUIRE(out_l[0] != 0.0f);
+        // The signal should be oscillating. A simple check is that the first
+        // half of the buffer should be different from the second half.
+        bool first_half_is_different = false;
+        for (int i = 0; i < block_size / 2; ++i) {
+            if (out_l[i] != out_l[i + block_size / 2]) {
+                first_half_is_different = true;
+                break;
+            }
+        }
+        REQUIRE(first_half_is_different);
+        // The left and right channels should be identical.
+        REQUIRE(out_l == out_r);
+    }
 }
 TEST_CASE("Integration Test: Error Handling", "[integration]") {
   SECTION("Invalid JSON handling") {

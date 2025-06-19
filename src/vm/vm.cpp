@@ -97,17 +97,22 @@ void VM::process(const float **inputs, float **outputs, int num_frames) {
         uint32_t reg_idx = m_bytecode[pc + 4 + num_inputs + i];
         output_ptrs[i] = m_registers[reg_idx].getBuffer();
       }
-      // If this is the audio_out module, we need to connect its outputs
-      // to the main output buffers provided to the VM.
-      constexpr uint32_t AUDIO_OUT_ID = 1;
-      if (module_id == AUDIO_OUT_ID && outputs) {
-          for(uint32_t i=0; i<num_outputs && outputs[i]; ++i) {
-              output_ptrs[i] = outputs[i];
-          }
-      }
       // Call the module's process method
       m_module_instances[module_id]->process(input_ptrs.data(), output_ptrs.data());
       pc += 4 + num_inputs + num_outputs;
+      break;
+    }
+    case OpCode::AUDIO_OUT: {
+      uint32_t num_inputs = m_bytecode[pc + 1];
+      if (outputs) { // Only process if we have output buffers
+          for (uint32_t i = 0; i < num_inputs; ++i) {
+              if (outputs[i]) { // Check if the specific output channel is valid
+                  uint32_t reg_idx = m_bytecode[pc + 2 + i];
+                  std::memcpy(outputs[i], m_registers[reg_idx].getConstBuffer(), num_frames * sizeof(float));
+              }
+          }
+      }
+      pc += 2 + num_inputs;
       break;
     }
     case OpCode::END: {

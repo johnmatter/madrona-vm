@@ -25,8 +25,7 @@ AudioOut::AudioOut(float sampleRate, bool testMode, unsigned int deviceId)
     : DSPModule(sampleRate), mTestMode(testMode), mDeviceId(deviceId) {
   if (!mTestMode) {
     // Create context and custom audio task with device selection
-    mContext = std::make_unique<ml::AudioContext>(0, kOutputChannels,
-                                                 static_cast<int>(sampleRate));
+    mContext = std::make_unique<ml::AudioContext>(0, kOutputChannels, static_cast<int>(sampleRate));
     // Create custom audio task
     mCustomAudioTask = std::make_unique<ml::CustomAudioTask>(
         mContext.get(),
@@ -42,11 +41,21 @@ AudioOut::~AudioOut() {
     mCustomAudioTask->stopAudio();
   }
 }
-void AudioOut::process(const float **inputs, float **outputs) {
-  // This module is now just a driver for the audio callback.
-  // The VM will handle writing to the final output buffers.
-  // The graph compiler should route the inputs to this module
-  // to the main output buffers of the VM.
+void AudioOut::process(const float** inputs, float** outputs) {
+    if (mTestMode) {
+        // In test mode, just copy inputs to the output pointers provided
+        // by the VM. This allows testing the VM's output.
+        if (inputs[0] && outputs[0]) {
+            std::memcpy(outputs[0], inputs[0], kFloatsPerDSPVector * sizeof(float));
+        }
+        if (inputs[1] && outputs[1]) {
+            std::memcpy(outputs[1], inputs[1], kFloatsPerDSPVector * sizeof(float));
+        }
+        return;
+    }
+    // For the real audio task, the CustomAudioTask callback will pull data,
+    // so this process method doesn't need to do anything here.
+    // However, the VM expects a concrete implementation.
 }
 void AudioOut::setVMCallback(std::function<void(float **, int)> callback) {
   vmCallback_ = callback;
