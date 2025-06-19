@@ -2,3 +2,6 @@
 	path = external/madronalib
 	url = https://github.com/johnmatter/madronalib.git
 	branch = fix-compilation-issues
+[submodule "external/ftxui"]
+	path = external/ftxui
+	url = https://github.com/ArthurSonzogni/FTXUI.git

@@ -5,6 +5,7 @@
 #include "vm/vm.h"
 #include "vm/opcodes.h"
 #include "dsp/audio_out.h"
+#include "ui/device_selector.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -61,6 +62,12 @@ TEST_CASE("Integration Test: Offline Pipeline", "[integration]") {
 TEST_CASE("Integration Test: Real-time Audio Driver", "[integration][realtime]") {
     constexpr float sampleRate = 48000.0f;
     const int test_duration_ms = 500; // Half a second
+    // Prompt user to select an audio device
+    unsigned int selected_device_id = ui::DeviceSelector::selectAudioDevice();
+    if (selected_device_id == 0) {
+        std::cout << "No device selected or user quit. Skipping real-time test." << std::endl;
+        return;
+    }
     std::string patch_path(TEST_DATA_DIR);
     patch_path += "/simple_patch.json";
     std::ifstream patch_file(patch_path);
@@ -77,7 +84,7 @@ TEST_CASE("Integration Test: Real-time Audio Driver", "[integration][realtime]")
     std::atomic<int> processBlockCount{0};
     std::atomic<int> lastBlockSize{0};
     // Create the "real" audio driver that will run on its own thread
-    AudioOut audio_driver(sampleRate, false); // false = not test mode
+    AudioOut audio_driver(sampleRate, false, selected_device_id); // false = not test mode
     // Link the audio driver to our real VM
     audio_driver.setVMCallback(
         [&vm, &processBlockCount, &lastBlockSize](float** outputs, int size) {
