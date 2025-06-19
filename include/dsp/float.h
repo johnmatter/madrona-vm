@@ -1,7 +1,9 @@
 #pragma once
 #include "dsp/module.h"
-class Gain : public DSPModule {
+class Float : public DSPModule {
 public:
-  explicit Gain(float sampleRate);
+  explicit Float(float sampleRate);
   void process(const float** inputs, int num_inputs, float** outputs, int num_outputs) override;
+private:
+  float mValue;
 }; 

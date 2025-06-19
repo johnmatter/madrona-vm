@@ -10,7 +10,8 @@ SineGen::SineGen(float sampleRate) : DSPModule(sampleRate) {
 SineGen::~SineGen() {
   delete pImpl;
 }
-void SineGen::process(const float **inputs, float **outputs) {
+void SineGen::process(const float** inputs, int num_inputs, float** outputs, int num_outputs) {
+  if (num_inputs < 1) return; // Should always have a frequency input
   const float freq = inputs[0][0];
   const float sr = mSampleRate;
   // get frequency as cycles/sample

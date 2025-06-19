@@ -25,7 +25,7 @@ public:
   // see https://en.wikipedia.org/wiki/Rule_of_three_(C%2B%2B_programming)
   AudioOut(const AudioOut&) = delete;
   AudioOut& operator=(const AudioOut&) = delete;
-  void process(const float** inputs, float** outputs) override;
+  void process(const float** inputs, int num_inputs, float** outputs, int num_outputs) override;
   void setVMCallback(std::function<void(float**, int)> callback);
   // Device selection functionality (delegated to AudioDeviceManager)
   static std::vector<AudioDeviceInfo> getAvailableDevices() {

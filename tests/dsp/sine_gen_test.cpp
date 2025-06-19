@@ -12,7 +12,7 @@ TEST_CASE("SineGen normalized", "[dsp]") {
   std::vector<float> outputBuffer(bufferSize, 0.0f);
   const float* inputs[] = { freqBuffer.data() };
   float* outputs[] = { outputBuffer.data(), outputBuffer.data() };
-  sineGen.process(inputs, outputs);
+  sineGen.process(inputs, 1, outputs, 2);
   for (int i = 0; i < bufferSize; ++i) {
     REQUIRE(outputBuffer[i] >= -1.0f);
     REQUIRE(outputBuffer[i] <= 1.0f);
@@ -26,7 +26,7 @@ TEST_CASE("SineGen nonzero", "[dsp]") {
   const float* inputs[] = { freqBuffer.data() };
   float* outputs[] = { outputBuffer.data() };
   SECTION("Process") {
-    sineGen.process(inputs, outputs);
+    sineGen.process(inputs, 1, outputs, 1);
     bool outputIsNonZero = false;
     for (int i = 0; i < kFloatsPerDSPVector; ++i) {
       if (outputBuffer[i] != 0.0f) {
@@ -50,7 +50,7 @@ TEST_CASE("SineGen DSP Module", "[dsp][sine_gen]") {
         float* outputs[] = { out.data() };
         // Process a few blocks to ensure the oscillator has started
         for (int i=0; i<4; ++i) {
-            sine_gen.process(inputs, outputs);
+            sine_gen.process(inputs, 1, outputs, 1);
         }
         bool all_zero = true;
         for (int i = 0; i < block_sizen; ++i) {

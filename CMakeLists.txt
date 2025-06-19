@@ -21,15 +21,17 @@ include_directories(external/ftxui/include)
 # Collect source files
 file(GLOB_RECURSE SRC_FILES
   "src/dsp/*.cpp"
+  "src/parser/*.cpp"
+  "src/compiler/*.cpp"
+  "src/vm/*.cpp"
 )
-# Collect audio utility source files
-file(GLOB_RECURSE AUDIO_FILES
-  "src/audio/*.cpp"
-)
-# Collect ui source files
-file(GLOB_RECURSE UI_FILES
-  "src/ui/*.cpp"
-)
+# On Apple, we have some extra files for device selection
+if(APPLE)
+    file(GLOB_RECURSE AUDIO_FILES "src/audio/*.cpp")
+else()
+    set(AUDIO_FILES "")
+endif()
+file(GLOB_RECURSE UI_FILES "src/ui/*.cpp")
 # Create test executable
 add_executable(run_tests
   tests/TestMain.cpp
@@ -39,18 +41,9 @@ add_executable(run_tests
   tests/dsp/voice_controller_test.cpp
   tests/dsp/adsr_test.cpp
   tests/dsp/gain_test.cpp
+  tests/dsp/math_modules_test.cpp
   tests/parser/parser_test.cpp
   tests/compiler/compiler_test.cpp
-  src/dsp/module.cpp
-  src/dsp/sine_gen.cpp
-  src/dsp/adsr.cpp
-  src/dsp/audio_out.cpp
-  src/dsp/gain.cpp
-  src/dsp/voice_controller.cpp
-  src/parser/parser.cpp
-  src/compiler/compiler.cpp
-  src/compiler/module_registry.cpp
-  src/vm/vm.cpp
   ${SRC_FILES}
   ${AUDIO_FILES}
   ${UI_FILES}
@@ -64,16 +57,6 @@ target_link_libraries(run_tests madronalib component)
 # Create demo executable
 add_executable(simple_vm_demo
   examples/simple_vm_demo.cpp
-  src/parser/parser.cpp
-  src/compiler/compiler.cpp
-  src/compiler/module_registry.cpp
-  src/vm/vm.cpp
-  src/dsp/module.cpp
-  src/dsp/sine_gen.cpp
-  src/dsp/adsr.cpp
-  src/dsp/audio_out.cpp
-  src/dsp/gain.cpp
-  src/dsp/voice_controller.cpp
   ${SRC_FILES}
   ${AUDIO_FILES}
 )

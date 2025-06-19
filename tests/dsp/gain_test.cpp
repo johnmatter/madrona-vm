@@ -18,7 +18,7 @@ TEST_CASE("Gain Test", "[dsp]") {
   const float* inputs[] = {signalIn.data(), gainIn.data()};
   float* outputs[] = {out.data()};
   SECTION("Process a block with 0.5 gain") {
-    gainModule.process(inputs, outputs);
+    gainModule.process(inputs, 2, outputs, 1);
     for (int i = 0; i < blockSize; ++i) {
       INFO("Sample " << i << ": " << out[i]);
       REQUIRE(out[i] == Approx(0.25f));
@@ -28,7 +28,7 @@ TEST_CASE("Gain Test", "[dsp]") {
     for (int i = 0; i < blockSize; ++i) {
       gainIn[i] = 0.0f;
     }
-    gainModule.process(inputs, outputs);
+    gainModule.process(inputs, 2, outputs, 1);
     for (int i = 0; i < blockSize; ++i) {
       INFO("Sample " << i << ": " << out[i]);
       REQUIRE(out[i] == Approx(0.0f));
@@ -38,7 +38,7 @@ TEST_CASE("Gain Test", "[dsp]") {
     for (int i = 0; i < blockSize; ++i) {
       gainIn[i] = 1.0f;
     }
-    gainModule.process(inputs, outputs);
+    gainModule.process(inputs, 2, outputs, 1);
     for (int i = 0; i < blockSize; ++i) {
       INFO("Sample " << i << ": " << out[i]);
       REQUIRE(out[i] == Approx(0.5f));
@@ -49,7 +49,7 @@ TEST_CASE("Gain Test", "[dsp]") {
     for (int i = 0; i < blockSize; ++i) {
       gainIn[i] = static_cast<float>(i) / (blockSize - 1);
     }
-    gainModule.process(inputs, outputs);
+    gainModule.process(inputs, 2, outputs, 1);
     for (int i = 0; i < blockSize; ++i) {
       float expected = 0.5f * (static_cast<float>(i) / (blockSize - 1));
       INFO("Sample " << i << ": " << out[i] << " -- Expected: " << expected);
@@ -66,7 +66,7 @@ TEST_CASE("Gain DSP Module", "[dsp][gain]") {
         std::vector<float> out(block_size);
         const float* inputs[] = { audio_in.data(), gain_in.data() };
         float* outputs[] = { out.data() };
-        gain_module.process(inputs, outputs);
+        gain_module.process(inputs, 2, outputs, 1);
         // Expected output is 0.5 (audio) * 0.5 (gain) = 0.25
         for (int i = 0; i < block_size; ++i) {
             REQUIRE(out[i] == Approx(0.25f));
@@ -80,7 +80,7 @@ TEST_CASE("Gain DSP Module", "[dsp][gain]") {
         std::vector<float> out(block_size);
         const float* inputs[] = { audio_in.data(), gain_in.data() };
         float* outputs[] = { out.data() };
-        gain_module.process(inputs, outputs);
+        gain_module.process(inputs, 2, outputs, 1);
         for (int i = 0; i < block_size; ++i) {
             REQUIRE(out[i] == Approx(audio_in[i]));
         }
@@ -92,7 +92,7 @@ TEST_CASE("Gain DSP Module", "[dsp][gain]") {
         std::vector<float> out(block_size, 999.f); // Pre-fill with non-zero values
         const float* inputs[] = { audio_in.data(), gain_in.data() };
         float* outputs[] = { out.data() };
-        gain_module.process(inputs, outputs);
+        gain_module.process(inputs, 2, outputs, 1);
         for (int i = 0; i < block_size; ++i) {
             REQUIRE(out[i] == Approx(0.0f));
         }

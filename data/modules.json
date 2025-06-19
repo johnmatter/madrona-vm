@@ -23,6 +23,38 @@
         "inputs": ["in_l", "in_r"],
         "outputs": []
       }
+    },
+    {
+      "name": "add",
+      "id": 1026,
+      "info": {
+        "inputs": ["in1", "in2"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "mul",
+      "id": 1027,
+      "info": {
+        "inputs": ["in1", "in2"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "float",
+      "id": 1028,
+      "info": {
+        "inputs": ["value"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "int",
+      "id": 1029,
+      "info": {
+        "inputs": ["value"],
+        "outputs": ["out"]
+      }
     }
   ]
 } 

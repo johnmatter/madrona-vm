@@ -107,7 +107,11 @@ std::vector<uint32_t> Compiler::compile(const PatchGraph& graph, const ModuleReg
                 }
             }
             if (!found_connection) {
-                 throw std::runtime_error("Unconnected input port: " + node.name + ":" + port_name);
+                 // If an input is not connected and not provided as a constant,
+                 // we don't throw an error. This allows for modules with optional inputs,
+                 // like the 'value' of a float or int module that can be set by a constant
+                 // or an incoming signal. The module's process() method is responsible
+                 // for handling the case where an input buffer is null.
             }
         }
         // Allocate new registers for all of this module's output ports.

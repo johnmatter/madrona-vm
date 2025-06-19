@@ -41,14 +41,14 @@ AudioOut::~AudioOut() {
     mCustomAudioTask->stopAudio();
   }
 }
-void AudioOut::process(const float** inputs, float** outputs) {
+void AudioOut::process(const float** inputs, int num_inputs, float** outputs, int num_outputs) {
     if (mTestMode) {
         // In test mode, just copy inputs to the output pointers provided
         // by the VM. This allows testing the VM's output.
-        if (inputs[0] && outputs[0]) {
+        if (num_inputs > 0 && inputs[0] && outputs[0]) {
             std::memcpy(outputs[0], inputs[0], kFloatsPerDSPVector * sizeof(float));
         }
-        if (inputs[1] && outputs[1]) {
+        if (num_inputs > 1 && inputs[1] && outputs[1]) {
             std::memcpy(outputs[1], inputs[1], kFloatsPerDSPVector * sizeof(float));
         }
         return;

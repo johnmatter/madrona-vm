@@ -4,6 +4,10 @@
 #include "dsp/sine_gen.h"
 #include "dsp/gain.h"
 #include "dsp/audio_out.h"
+#include "dsp/float.h"
+#include "dsp/int.h"
+#include "dsp/add.h"
+#include "dsp/mul.h"
 #include <iostream>
 namespace madronavm {
 VM::VM(const ModuleRegistry& registry, float sampleRate, bool testMode) 
@@ -22,6 +26,14 @@ std::unique_ptr<DSPModule> VM::create_module(uint32_t module_id) {
       // We create one in test mode here so it exists as a module instance,
       // but it won't try to open an audio device.
       return std::make_unique<::AudioOut>(m_sampleRate, true);
+    case 1026: // add
+      return std::make_unique<Add>(m_sampleRate);
+    case 1027: // mul
+      return std::make_unique<Mul>(m_sampleRate);
+    case 1028: // float
+      return std::make_unique<::Float>(m_sampleRate);
+    case 1029: // int
+      return std::make_unique<::Int>(m_sampleRate);
     default:
       throw std::runtime_error("Unknown module ID: " + std::to_string(module_id));
   }
@@ -49,6 +61,12 @@ void VM::load_program(std::vector<uint32_t> new_bytecode) {
     return;
   }
   m_registers.resize(header->num_registers);
+}
+void VM::set_audio_out_module(AudioOut* pModule) {
+    m_audio_out_module = pModule;
+}
+const ml::DSPVector& VM::getRegisterForTest(int index) const {
+    return m_registers[index];
 }
 void VM::processBlock(float** outputs, int blockSize) {
     // For now, we ignore inputs and assume blockSize matches kFloatsPerDSPVector
@@ -98,7 +116,7 @@ void VM::process(const float **inputs, float **outputs, int num_frames) {
         output_ptrs[i] = m_registers[reg_idx].getBuffer();
       }
       // Call the module's process method
-      m_module_instances[module_id]->process(input_ptrs.data(), output_ptrs.data());
+      m_module_instances[module_id]->process(input_ptrs.data(), num_inputs, output_ptrs.data(), num_outputs);
       pc += 4 + num_inputs + num_outputs;
       break;
     }

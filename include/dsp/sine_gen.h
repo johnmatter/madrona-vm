@@ -5,7 +5,7 @@ class SineGen : public DSPModule {
 public:
   explicit SineGen(float sampleRate);
   ~SineGen() override;
-  void process(const float **inputs, float **outputs) override;
+  void process(const float **inputs, int num_inputs, float **outputs, int num_outputs) override;
 private:
   struct impl;
   impl* pImpl;
