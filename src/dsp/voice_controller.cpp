@@ -1,4 +1,5 @@
 #include "dsp/voice_controller.h"
+namespace madronavm::dsp {
 VoiceController::VoiceController(float sampleRate)
     : DSPModule(sampleRate), mEventProcessor(sampleRate) {
   mEventProcessor.setPolyphony(kMaxVoices);
@@ -50,4 +51,5 @@ void VoiceController::noteOff(int pitch, int velocity, int voice, int time) {
   e.time = time;
   e.channel = voice;
   mEventQueue.push_back(e);
-} 
+}
+} // namespace madronavm::dsp 

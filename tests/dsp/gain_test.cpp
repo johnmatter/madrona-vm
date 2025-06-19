@@ -1,6 +1,9 @@
 #include "dsp/gain.h"
 #include "catch.hpp"
+#include "MLDSPGens.h" // For kFloatsPerDSPVector
 #include <vector>
+using namespace madronavm;
+using namespace madronavm::dsp;
 TEST_CASE("Gain Test", "[dsp]") {
   constexpr float sampleRate = 48000.0f;
   constexpr int blockSize = 64; // Should match kFloatsPerDSPVector

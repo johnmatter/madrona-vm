@@ -2,6 +2,7 @@
 #include "dsp/sine_gen.h"
 #include "MLDSPGens.h"
 #include "dsp/validation.h"
+namespace madronavm::dsp {
 struct SineGen::impl {
   ml::SineGen mOsc;
 };
@@ -12,7 +13,7 @@ SineGen::~SineGen() {
   delete pImpl;
 }
 void SineGen::process(const float** inputs, int num_inputs, float** outputs, int num_outputs) {
-  if (!madronavm::dsp::validate_ports("SineGen", num_inputs, inputs, {0}, num_outputs, 1)) return;
+  if (!validate_ports("SineGen", num_inputs, inputs, {0}, num_outputs, 1)) return;
   const float freq = inputs[0][0];
   const float sr = mSampleRate;
   // get frequency as cycles/sample
@@ -24,3 +25,4 @@ void SineGen::process(const float** inputs, int num_inputs, float** outputs, int
     outputs[0][i] = v[i];
   }
 }
+} // namespace madronavm::dsp

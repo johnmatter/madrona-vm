@@ -44,7 +44,7 @@
       "name": "float",
       "id": 1028,
       "info": {
-        "inputs": ["value"],
+        "inputs": ["in"],
         "outputs": ["out"]
       }
     },
@@ -52,7 +52,7 @@
       "name": "int",
       "id": 1029,
       "info": {
-        "inputs": ["value"],
+        "inputs": ["in"],
         "outputs": ["out"]
       }
     }

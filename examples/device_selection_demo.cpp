@@ -2,6 +2,8 @@
 #include <vector>
 #include "dsp/audio_out.h"
 #include "audio/device_info.h"
+#include "ui/device_selector.h"
+using namespace madronavm;
 int main() {
   std::cout << "=== Audio Device Selection Demo ===" << std::endl;
   // List all available audio devices using AudioDeviceManager

@@ -1,6 +1,8 @@
 #include "dsp/voice_controller.h"
 #include "catch.hpp"
 #include <vector>
+using namespace madronavm;
+using namespace madronavm::dsp;
 TEST_CASE("VoiceController Test", "[dsp]") {
     constexpr float sampleRate = 48000.0f;
     constexpr int blockSize = kFloatsPerDSPVector;

@@ -1,8 +1,5 @@
 #pragma once
 #include "dsp/module.h"
-#include "madronalib.h"
-#include "MLAudioTask.h"
-#include "MLDSPBuffer.h"
 #include "audio/device_info.h"
 #include <memory>
 #include <functional>
@@ -10,24 +7,22 @@
 #include <string>
 // Forward-declare madronalib types
 namespace ml {
-  class DSPVectorDynamic;
   class AudioContext;
   class CustomAudioTask;
 }
-class AudioOut : public DSPModule {
+namespace madronavm {
+class AudioOut : public dsp::DSPModule {
 public:
-  explicit AudioOut(float sampleRate, bool testMode = false, unsigned int deviceId = 0);
+  explicit AudioOut(float sampleRate, bool testMode = false,
+                    unsigned int deviceId = 0);
   ~AudioOut() override;
-  // Delete copy and move constructors.
-  // This class manages unique hardware resources via unique_ptr, so creating copies might be weird.
-  // I believe the compiler wouldn't even generate these in the first place, since we declared `virtual ~DSPModule() = default;` in the base class.
-  // So. These are just for future readers of the code.
-  // see https://en.wikipedia.org/wiki/Rule_of_three_(C%2B%2B_programming)
   AudioOut(const AudioOut&) = delete;
   AudioOut& operator=(const AudioOut&) = delete;
-  void process(const float** inputs, int num_inputs, float** outputs, int num_outputs) override;
+  AudioOut(AudioOut&&) = delete;
+  AudioOut& operator=(AudioOut&&) = delete;
+  void process(const float **inputs, int num_inputs, float **outputs,
+               int num_outputs) override;
   void setVMCallback(std::function<void(float**, int)> callback);
-  // Device selection functionality (delegated to AudioDeviceManager)
   static std::vector<AudioDeviceInfo> getAvailableDevices() {
     return AudioDeviceManager::getAvailableDevices();
   }
@@ -43,3 +38,4 @@ private:
   bool mTestMode;
   unsigned int mDeviceId;
 };
+} // namespace madronavm

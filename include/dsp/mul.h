@@ -1,9 +1,10 @@
 #pragma once
 #include "dsp/module.h"
-namespace madronavm {
+namespace madronavm::dsp {
 class Mul : public DSPModule {
 public:
   explicit Mul(float sampleRate);
-  void process(const float** inputs, int num_inputs, float** outputs, int num_outputs) override;
+  ~Mul() override = default;
+  void process(const float **inputs, int num_inputs, float **outputs, int num_outputs) override;
 };
-} // namespace madronavm 
+} // namespace madronavm::dsp

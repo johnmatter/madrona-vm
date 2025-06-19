@@ -16,6 +16,8 @@
 #include "vm/vm.h"
 #include "vm/opcodes.h"
 #include "dsp/audio_out.h"
+#include "ui/device_selector.h"
+#include "audio/device_info.h"
 #include <iostream>
 #include <fstream>
 #include <chrono>
@@ -25,6 +27,7 @@
 #ifndef MODULE_DEFS_PATH
 #define MODULE_DEFS_PATH "data/modules.json"
 #endif
+using namespace madronavm;
 int main(int argc, char* argv[]) {
   try {
     std::cout << "=== Madrona VM Demo Application ===" << std::endl;

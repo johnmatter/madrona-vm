@@ -8,14 +8,15 @@
 #define MODULE_DEFS_PATH "data/modules.json"
 #endif
 using namespace madronavm;
+using namespace madronavm::dsp;
 TEST_CASE("VM correctly processes math modules", "[vm]") {
     ModuleRegistry registry(MODULE_DEFS_PATH);
     VM vm(registry, 48000, true);
     SECTION("Test add module") {
         const char* json_patch = R"({
             "modules": [
-                {"id": 1, "name": "float", "data": {"value": 10.0}},
-                {"id": 2, "name": "float", "data": {"value": 20.0}},
+                {"id": 1, "name": "float", "data": {"in": 10.0}},
+                {"id": 2, "name": "float", "data": {"in": 20.0}},
                 {"id": 3, "name": "add", "data": {}}
             ],
             "connections": [
@@ -39,8 +40,8 @@ TEST_CASE("VM correctly processes math modules", "[vm]") {
     SECTION("Test mul module") {
         const char* json_patch = R"({
             "modules": [
-                {"id": 1, "name": "float", "data": {"value": 10.0}},
-                {"id": 2, "name": "float", "data": {"value": 20.0}},
+                {"id": 1, "name": "float", "data": {"in": 10.0}},
+                {"id": 2, "name": "float", "data": {"in": 20.0}},
                 {"id": 3, "name": "mul", "data": {}}
             ],
             "connections": [
@@ -58,7 +59,7 @@ TEST_CASE("VM correctly processes math modules", "[vm]") {
     SECTION("Test float module with constant") {
         const char* json_patch = R"({
             "modules": [
-                {"id": 1, "name": "float", "data": {"value": 123.45}}
+                {"id": 1, "name": "float", "data": {"in": 123.45}}
             ],
             "connections": []
         })";
@@ -74,7 +75,7 @@ TEST_CASE("VM correctly processes math modules", "[vm]") {
     SECTION("Test int module with constant") {
         const char* json_patch = R"({
             "modules": [
-                {"id": 1, "name": "int", "data": {"value": 99.8}}
+                {"id": 1, "name": "int", "data": {"in": 99.8}}
             ],
             "connections": []
         })";
@@ -87,4 +88,18 @@ TEST_CASE("VM correctly processes math modules", "[vm]") {
         const auto& result_reg = vm.getRegisterForTest(1);
         REQUIRE(result_reg[0] == 99.0f);
     }
+}
+TEST_CASE("Float/Int value retention", "[vm][dsp]") {
+    // TODO: Implement a test to verify that Float and Int modules retain their
+    // value when their input is disconnected. This requires the ability to
+    // update the patch graph and re-compile/reload the VM on the fly, which
+    // is not yet supported.
+    // The test would look something like this:
+    // 1. Create a graph with a Float module connected to a constant.
+    // 2. Process a block, verify the Float module's output is correct.
+    // 3. Create a new graph with the connection removed.
+    // 4. Reload the VM with the new graph's bytecode.
+    // 5. Process another block.
+    // 6. Verify the Float module's output is the *same* as the last block,
+    //    demonstrating that it has retained its value.
 } 

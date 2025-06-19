@@ -3,6 +3,8 @@
 #include "MLDSPGens.h" // For kFloatsPerDSPVector
 #include <vector>
 #include <cmath>
+using namespace madronavm;
+using namespace madronavm::dsp;
 constexpr int sampleRate = 44100;
 constexpr int bufferSize = 256;
 // Ensure output is normalized

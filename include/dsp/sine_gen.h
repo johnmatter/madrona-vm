@@ -1,6 +1,7 @@
 #pragma once
 #include "MLDSPGens.h"
-#include "module.h"
+#include "dsp/module.h"
+namespace madronavm::dsp {
 class SineGen : public DSPModule {
 public:
   explicit SineGen(float sampleRate);
@@ -10,3 +11,4 @@ private:
   struct impl;
   impl* pImpl;
 };
+} // namespace madronavm::dsp

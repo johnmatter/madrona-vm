@@ -6,6 +6,7 @@
 #include "audio/device_info.h"
 #include <iostream>
 #include <vector>
+namespace madronavm {
 /*
  * Audio Device Selection Implementation Notes:
  *
@@ -22,7 +23,7 @@
 using namespace ml;
 constexpr int kOutputChannels = 2;
 AudioOut::AudioOut(float sampleRate, bool testMode, unsigned int deviceId)
-    : DSPModule(sampleRate), mTestMode(testMode), mDeviceId(deviceId) {
+    : dsp::DSPModule(sampleRate), mTestMode(testMode), mDeviceId(deviceId) {
   if (!mTestMode) {
     // Create context and custom audio task with device selection
     mContext = std::make_unique<ml::AudioContext>(0, kOutputChannels, static_cast<int>(sampleRate));
@@ -77,3 +78,4 @@ void AudioOut::audioCallback(ml::AudioContext* ctx) {
     }
   }
 }
+} // namespace madronavm

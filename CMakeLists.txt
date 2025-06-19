@@ -17,6 +17,7 @@ include_directories(external/madronalib/source/app)
 include_directories(external/madronalib/source/matrix)
 include_directories(external/madronalib/external/sse2neon)
 include_directories(external/madronalib/external/cJSON)
+include_directories(external/madronalib/external/rtaudio)
 include_directories(external/ftxui/include)
 # Collect source files
 file(GLOB_RECURSE SRC_FILES

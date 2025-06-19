@@ -1,6 +1,8 @@
-#include "dsp/adsr.h"
 #include "catch.hpp"
+#include "dsp/adsr.h"
 #include <vector>
+using namespace madronavm;
+using namespace madronavm::dsp;
 // Helper function to process a block and check a condition
 void processAndCheck(ADSR& adsr, const float* inputs[], float* outputs[],
                      int numSamples, float expectedValue, bool check) {

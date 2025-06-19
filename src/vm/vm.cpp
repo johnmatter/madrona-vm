@@ -15,27 +15,27 @@ constexpr uint32_t kNullRegister = std::numeric_limits<uint32_t>::max();
 VM::VM(const ModuleRegistry& registry, float sampleRate, bool testMode) 
   : m_registry(registry), m_sampleRate(sampleRate), m_testMode(testMode) {}
 VM::~VM() {}
-std::unique_ptr<DSPModule> VM::create_module(uint32_t module_id) {
+std::unique_ptr<dsp::DSPModule> VM::create_module(uint32_t module_id) {
   // Map module IDs to their implementations based on data/modules.json
   switch (module_id) {
     case 256: // sine_osc
-      return std::make_unique<::SineGen>(m_sampleRate);
+      return std::make_unique<dsp::SineGen>(m_sampleRate);
     case 1025: // gain  
-      return std::make_unique<::Gain>(m_sampleRate);
+      return std::make_unique<dsp::Gain>(m_sampleRate);
     case 1: // audio_out
       // The VM should not create a real audio driver. The main application
       // will create the "real" AudioOut module and link it to the VM.
       // We create one in test mode here so it exists as a module instance,
       // but it won't try to open an audio device.
-      return std::make_unique<::AudioOut>(m_sampleRate, true);
+      return std::make_unique<AudioOut>(m_sampleRate, true);
     case 1026: // add
-      return std::make_unique<Add>(m_sampleRate);
+      return std::make_unique<dsp::Add>(m_sampleRate);
     case 1027: // mul
-      return std::make_unique<Mul>(m_sampleRate);
+      return std::make_unique<dsp::Mul>(m_sampleRate);
     case 1028: // float
-      return std::make_unique<::Float>(m_sampleRate);
+      return std::make_unique<dsp::Float>(m_sampleRate);
     case 1029: // int
-      return std::make_unique<::Int>(m_sampleRate);
+      return std::make_unique<dsp::Int>(m_sampleRate);
     default:
       throw std::runtime_error("Unknown module ID: " + std::to_string(module_id));
   }
