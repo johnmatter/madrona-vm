@@ -8,6 +8,7 @@
 #include "dsp/int.h"
 #include "dsp/add.h"
 #include "dsp/mul.h"
+#include "dsp/adsr.h"
 #include <iostream>
 #include <limits>
 namespace madronavm {
@@ -20,7 +21,7 @@ std::unique_ptr<dsp::DSPModule> VM::create_module(uint32_t module_id) {
   switch (module_id) {
     case 256: // sine_osc
       return std::make_unique<dsp::SineGen>(m_sampleRate);
-    case 1025: // gain  
+    case 1027: // gain
       return std::make_unique<dsp::Gain>(m_sampleRate);
     case 1: // audio_out
       // The VM should not create a real audio driver. The main application
@@ -28,14 +29,16 @@ std::unique_ptr<dsp::DSPModule> VM::create_module(uint32_t module_id) {
       // We create one in test mode here so it exists as a module instance,
       // but it won't try to open an audio device.
       return std::make_unique<AudioOut>(m_sampleRate, true);
-    case 1026: // add
+    case 1024: // add (0x400)
       return std::make_unique<dsp::Add>(m_sampleRate);
-    case 1027: // mul
+    case 1025: // mul (0x401)
       return std::make_unique<dsp::Mul>(m_sampleRate);
     case 1028: // float
       return std::make_unique<dsp::Float>(m_sampleRate);
     case 1029: // int
       return std::make_unique<dsp::Int>(m_sampleRate);
+    case 1536: // adsr (0x600)
+      return std::make_unique<dsp::ADSR>(m_sampleRate);
     default:
       throw std::runtime_error("Unknown module ID: " + std::to_string(module_id));
   }

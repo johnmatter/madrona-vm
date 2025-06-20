@@ -76,7 +76,7 @@ TEST_CASE("Compiler correctly generates bytecode", "[compiler]") {
         (uint32_t)madronavm::OpCode::PROC, 256, 1, 1, 0, 1,          // PROC sine_osc in:[r0] out:[r1]
         // Node 2: gain (ID 0x401 = 1025)
         (uint32_t)madronavm::OpCode::LOAD_K, 2, gain_as_u32,           // LOAD_K r2, 0.5
-        (uint32_t)madronavm::OpCode::PROC, 1025, 2, 1, 1, 2, 3,       // PROC gain in:[r1, r2] out:[r3]
+        (uint32_t)madronavm::OpCode::PROC, 1027, 2, 1, 1, 2, 3,       // PROC gain in:[r1, r2] out:[r3]
         // Node 3: audio_out
         (uint32_t)madronavm::OpCode::AUDIO_OUT, 2, 3, 3,          // AUDIO_OUT 2 in:[r3, r3]
         // End of program

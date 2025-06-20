@@ -10,7 +10,7 @@
     },
     {
       "name": "gain",
-      "id": 1025,
+      "id": 1027,
       "info": {
         "inputs": ["in", "gain"],
         "outputs": ["out"]
@@ -26,7 +26,7 @@
     },
     {
       "name": "add",
-      "id": 1026,
+      "id": 1024,
       "info": {
         "inputs": ["in1", "in2"],
         "outputs": ["out"]
@@ -34,7 +34,7 @@
     },
     {
       "name": "mul",
-      "id": 1027,
+      "id": 1025,
       "info": {
         "inputs": ["in1", "in2"],
         "outputs": ["out"]
@@ -55,6 +55,14 @@
         "inputs": ["in"],
         "outputs": ["out"]
       }
+    },
+    {
+      "name": "adsr",
+      "id": 1536,
+      "info": {
+        "inputs": ["gate", "attack", "decay", "sustain", "release"],
+        "outputs": ["out"]
+      }
     }
   ]
-} 
+}
