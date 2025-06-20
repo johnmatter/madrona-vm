@@ -25,7 +25,7 @@ namespace madronavm {
 TEST_CASE("Integration Test: Offline Pipeline", "[integration]") {
   SECTION("Complete Pipeline: Parse -> Compile -> VM Execute") {
     std::string patch_path(TEST_DATA_DIR);
-    patch_path += "/simple_patch.json";
+    patch_path += "/a440.json";
     std::ifstream patch_file(patch_path);
     REQUIRE(patch_file.is_open());
     std::string json_content((std::istreambuf_iterator<char>(patch_file)),
@@ -70,7 +70,7 @@ TEST_CASE("Integration Test: Real-time Audio Driver", "[integration][realtime]")
         return;
     }
     std::string patch_path(TEST_DATA_DIR);
-    patch_path += "/simple_patch.json";
+    patch_path += "/a440.json";
     std::ifstream patch_file(patch_path);
     REQUIRE(patch_file.is_open());
     std::string json_content((std::istreambuf_iterator<char>(patch_file)),
@@ -116,10 +116,10 @@ TEST_CASE("Integration Test: Real-time Audio Driver", "[integration][realtime]")
     REQUIRE(actual_blocks <= upper_bound);
 }
 TEST_CASE("Integration Test: VM Audio Output Verification", "[integration][vm]") {
-    SECTION("VM produces audible sine wave for simple_patch.json") {
+    SECTION("VM produces audible sine wave for a440.json") {
         // 1. Load and compile the patch
         std::string patch_path(TEST_DATA_DIR);
-        patch_path += "/simple_patch.json";
+        patch_path += "/a440.json";
         std::ifstream patch_file(patch_path);
         REQUIRE(patch_file.is_open());
         std::string json_content((std::istreambuf_iterator<char>(patch_file)), std::istreambuf_iterator<char>());
@@ -188,4 +188,4 @@ TEST_CASE("Integration Test: Error Handling", "[integration]") {
     REQUIRE_NOTHROW(vm.process(&inputs, &outputs, 64));
   }
 }
-} // namespace madronavm 
+} // namespace madronavm

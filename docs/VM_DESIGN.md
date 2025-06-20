@@ -13,7 +13,7 @@ Patches are defined in a JSON format. This format describes the DSP modules to b
 {
   "version": 1,
   "modules": [
-    { "id": 1, "name": "sine_osc", "data": { "freq": 440.0 } },
+    { "id": 1, "name": "sine_gen", "data": { "freq": 440.0 } },
     { "id": 2, "name": "gain", "data": { "gain": 0.5 } },
     { "id": 3, "name": "audio_out" }
   ],
@@ -48,7 +48,7 @@ struct ConstantInput {
 // Represents a single DSP module instance in the graph.
 struct Node {
     uint32_t id;
-    std::string name; // e.g., "sine_osc"
+    std::string name; // e.g., "sine_gen"
     std::vector<ConstantInput> constants;
 };
 // Represents a connection between two nodes.
@@ -172,7 +172,7 @@ The `process` method contains a loop that walks through the `m_bytecode` vector:
 ## 7. Conventions and Compatibility
 To ensure the system is maintainable and extensible, we will adhere to the following conventions and compatibility strategies.
 ### Bytecode and Module Conventions
-*   **Module Registry**: The VM will maintain a central registry that maps module names (e.g., `"sine_osc"`) to internal, stable integer IDs. The bytecode's `PROC` instruction will use this registry ID, not the patch-local `id` from the JSON file. This decouples the bytecode from the user's patch structure.
+*   **Module Registry**: The VM will maintain a central registry that maps module names (e.g., `"sine_gen"`) to internal, stable integer IDs. The bytecode's `PROC` instruction will use this registry ID, not the patch-local `id` from the JSON file. This decouples the bytecode from the user's patch structure.
 *   **Port Indexing**: Within a `DSPModule`'s definition, its input and output ports will be assigned fixed, zero-based indices. The compiler will use these indices to map connections to the correct registers. The bytecode will be independent of the string names of ports.
 *   **Constants**: Constants defined in the `data` section of a module in JSON will be handled by the `LOAD_K` instruction at compile time. They are not handled dynamically by the `PROC` instruction.
 ### Intermediate Representation (IR) Compatibility Plan

@@ -8,7 +8,7 @@
 #endif
 TEST_CASE("Parser correctly parses a simple patch", "[parser]") {
     std::string path(TEST_DATA_DIR);
-    path += "/simple_patch.json";
+    path += "/a440.json";
     std::ifstream t(path);
     if (!t.is_open()) {
         std::cerr << "Failed to open " << path << std::endl;
@@ -22,7 +22,7 @@ TEST_CASE("Parser correctly parses a simple patch", "[parser]") {
     // Check modules
     auto& node1 = graph.nodes[0];
     REQUIRE(node1.id == 1);
-    REQUIRE(node1.name == "sine_osc");
+    REQUIRE(node1.name == "sine_gen");
     REQUIRE(node1.constants.size() == 1);
     REQUIRE(node1.constants[0].port_name == "freq");
     REQUIRE(node1.constants[0].value == 440.0f);
@@ -52,4 +52,4 @@ TEST_CASE("Parser correctly parses a simple patch", "[parser]") {
     REQUIRE(conn3.from_port_name == "out");
     REQUIRE(conn3.to_node_id == 3);
     REQUIRE(conn3.to_port_name == "in_r");
-} 
+}

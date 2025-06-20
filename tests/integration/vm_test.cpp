@@ -73,16 +73,16 @@ TEST_CASE("VM PROC Instruction - Sine Oscillator", "[vm]") {
   VM vm(registry, 44100.0f, true); // testMode = true
   // Create bytecode that sets up a sine oscillator:
   // LOAD_K 0, 440.0f    (load frequency into register 0)
-  // PROC 256, 1, 1, 0, 1 (sine_osc: 1 input from reg 0, 1 output to reg 1)
+  // PROC 256, 1, 1, 0, 1 (sine_gen: 1 input from reg 0, 1 output to reg 1)
   // END
   auto bytecode = create_bytecode_header(11, 2); // 4 header + 7 instruction words
   // LOAD_K 0, 440.0f
   bytecode.push_back(static_cast<uint32_t>(OpCode::LOAD_K));
   bytecode.push_back(0); // dest_reg = 0
   bytecode.push_back(float_to_uint32(440.0f)); // value = 440.0f
-  // PROC 256, 1, 1, 0, 1 (sine_osc module)
+  // PROC 256, 1, 1, 0, 1 (sine_gen module)
   bytecode.push_back(static_cast<uint32_t>(OpCode::PROC));
-  bytecode.push_back(256); // module_id = sine_osc
+  bytecode.push_back(256); // module_id = sine_gen
   bytecode.push_back(1);   // num_inputs = 1
   bytecode.push_back(1);   // num_outputs = 1
   bytecode.push_back(0);   // input from register 0
@@ -178,7 +178,7 @@ TEST_CASE("VM Complex Signal Chain - Sine -> Gain", "[vm]") {
   VM vm(registry, 44100.0f, true); // testMode = true
   // Create bytecode that chains sine oscillator -> gain:
   // LOAD_K 0, 440.0f       (load frequency into register 0)
-  // PROC 256, 1, 1, 0, 1   (sine_osc: freq from reg 0, output to reg 1)
+  // PROC 256, 1, 1, 0, 1   (sine_gen: freq from reg 0, output to reg 1)
   // LOAD_K 2, 0.5f         (load gain value into register 2)
   // PROC 1025, 2, 1, 1, 2, 3 (gain: signal from reg 1, gain from reg 2, output to reg 3)
   // END
@@ -187,9 +187,9 @@ TEST_CASE("VM Complex Signal Chain - Sine -> Gain", "[vm]") {
   bytecode.push_back(static_cast<uint32_t>(OpCode::LOAD_K));
   bytecode.push_back(0);
   bytecode.push_back(float_to_uint32(440.0f));
-  // PROC 256, 1, 1, 0, 1 (sine_osc)
+  // PROC 256, 1, 1, 0, 1 (sine_gen)
   bytecode.push_back(static_cast<uint32_t>(OpCode::PROC));
-  bytecode.push_back(256); // module_id = sine_osc
+  bytecode.push_back(256); // module_id = sine_gen
   bytecode.push_back(1);   // num_inputs = 1
   bytecode.push_back(1);   // num_outputs = 1
   bytecode.push_back(0);   // input from register 0 (frequency)

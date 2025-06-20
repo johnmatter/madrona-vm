@@ -2,7 +2,7 @@
   "modules": [
     {
       "id": 1,
-      "name": "sine_osc",
+      "name": "sine_gen",
       "data": {
         "freq": 440.0
       }

@@ -1,0 +1,55 @@
+{
+  "modules": [
+    {
+      "id": 1,
+      "name": "phasor_gen",
+      "data": {
+        "freq": 35.0
+      }
+    },
+    {
+      "id": 2,
+      "name": "gain",
+      "data": {
+        "gain": 0.25
+      }
+    },
+    {
+      "id": 3,
+      "name": "audio_out",
+      "data": {}
+    },
+    {
+      "id": 4,
+      "name": "gain",
+      "data": {
+        "gain": 0.25
+      }
+    },
+    {
+      "id": 5,
+      "name": "phasor_gen",
+      "data": {
+        "freq": 35.2
+      }
+    }
+  ],
+  "connections": [
+    {
+      "from": "1:out",
+      "to": "2:in"
+    },
+    {
+      "from": "2:out",
+      "to": "3:in_l"
+    },
+    {
+      "from": "5:out",
+      "to": "4:in"
+    },
+    {
+      "from": "4:out",
+      "to": "3:in_r"
+    }
+  ]
+}

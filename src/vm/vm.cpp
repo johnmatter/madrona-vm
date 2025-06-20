@@ -2,6 +2,7 @@
 #include "vm/vm.h"
 #include "vm/opcodes.h"
 #include "dsp/sine_gen.h"
+#include "dsp/phasor_gen.h"
 #include "dsp/gain.h"
 #include "dsp/audio_out.h"
 #include "dsp/float.h"
@@ -19,8 +20,10 @@ VM::~VM() {}
 std::unique_ptr<dsp::DSPModule> VM::create_module(uint32_t module_id) {
   // Map module IDs to their implementations based on data/modules.json
   switch (module_id) {
-    case 256: // sine_osc
+    case 256: // sine_gen
       return std::make_unique<dsp::SineGen>(m_sampleRate);
+    case 257: // phasor_gen
+      return std::make_unique<dsp::PhasorGen>(m_sampleRate);
     case 1027: // gain
       return std::make_unique<dsp::Gain>(m_sampleRate);
     case 1: // audio_out
@@ -101,17 +104,18 @@ void VM::process(const float **inputs, float **outputs, int num_frames) {
       break;
     }
     case OpCode::PROC: {
-      uint32_t module_id = m_bytecode[pc + 1];
-      uint32_t num_inputs = m_bytecode[pc + 2];
-      uint32_t num_outputs = m_bytecode[pc + 3];
+      uint32_t node_id = m_bytecode[pc + 1];
+      uint32_t module_id = m_bytecode[pc + 2];
+      uint32_t num_inputs = m_bytecode[pc + 3];
+      uint32_t num_outputs = m_bytecode[pc + 4];
       // Create module instance if it doesn't exist
-      if (m_module_instances.find(module_id) == m_module_instances.end()) {
-        m_module_instances[module_id] = create_module(module_id);
+      if (m_module_instances.find(node_id) == m_module_instances.end()) {
+        m_module_instances[node_id] = create_module(module_id);
       }
       // Gather input register pointers
       std::vector<const float*> input_ptrs(num_inputs);
       for (uint32_t i = 0; i < num_inputs; ++i) {
-        uint32_t reg_idx = m_bytecode[pc + 4 + i];
+        uint32_t reg_idx = m_bytecode[pc + 5 + i];
         if (reg_idx == kNullRegister) {
             input_ptrs[i] = nullptr;
         } else {
@@ -121,12 +125,12 @@ void VM::process(const float **inputs, float **outputs, int num_frames) {
       // Gather output register pointers  
       std::vector<float*> output_ptrs(num_outputs);
       for (uint32_t i = 0; i < num_outputs; ++i) {
-        uint32_t reg_idx = m_bytecode[pc + 4 + num_inputs + i];
+        uint32_t reg_idx = m_bytecode[pc + 5 + num_inputs + i];
         output_ptrs[i] = m_registers[reg_idx].getBuffer();
       }
       // Call the module's process method
-      m_module_instances[module_id]->process(input_ptrs.data(), num_inputs, output_ptrs.data(), num_outputs);
-      pc += 4 + num_inputs + num_outputs;
+      m_module_instances[node_id]->process(input_ptrs.data(), num_inputs, output_ptrs.data(), num_outputs);
+      pc += 5 + num_inputs + num_outputs;
       break;
     }
     case OpCode::AUDIO_OUT: {

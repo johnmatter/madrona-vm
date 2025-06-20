@@ -125,6 +125,7 @@ std::vector<uint32_t> Compiler::compile(const PatchGraph& graph, const ModuleReg
             instructions.insert(instructions.end(), in_regs.begin(), in_regs.end());
         } else {
             instructions.push_back(static_cast<uint32_t>(OpCode::PROC));
+            instructions.push_back(node.id);
             instructions.push_back(registry.get_id(node.name));
             instructions.push_back(in_regs.size());
             instructions.push_back(out_regs.size());

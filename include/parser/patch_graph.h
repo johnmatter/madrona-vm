@@ -12,7 +12,7 @@ struct ConstantInput {
 // Represents a single DSP module instance in the graph.
 struct Node {
   uint32_t id;
-  std::string name; // e.g., "sine_osc"
+  std::string name; // e.g., "sine_gen"
   std::vector<ConstantInput> constants;
 };
 // Represents a connection between two nodes.

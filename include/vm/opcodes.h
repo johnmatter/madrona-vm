@@ -5,12 +5,12 @@ namespace madronavm {
 enum class OpCode : uint32_t {
     NO_OP = 0x00,
     LOAD_K = 0x01,      // dest_reg, value
-    PROC = 0x02,        // module_id, num_inputs, num_outputs, [in_regs...], [out_regs...]
+    PROC = 0x02,        // node_id, module_id, num_inputs, num_outputs, [in_regs...], [out_regs...]
     AUDIO_OUT = 0x03,   // num_inputs, [in_regs...]
     END = 0xFF
 };
-// The magic number for identifying Madrona VM bytecode files. 'MADR' in ASCII.
-const uint32_t kMagicNumber = 0x4D414452;
+// The magic number for identifying Madrona VM bytecode files.
+const uint32_t kMagicNumber = 0x41434142;
 const uint32_t kBytecodeVersion = 1;
 // The header at the beginning of every bytecode buffer.
 struct BytecodeHeader {
@@ -19,4 +19,4 @@ struct BytecodeHeader {
     uint32_t program_size_words; // Total size of bytecode, including header.
     uint32_t num_registers;      // Number of DSPVector registers required.
 };
-} // namespace madronavm 
+} // namespace madronavm

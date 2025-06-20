@@ -1,8 +1,16 @@
 {
   "modules": [
     {
-      "name": "sine_osc",
+      "name": "sine_gen",
       "id": 256,
+      "info": {
+        "inputs": ["freq"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "phasor_gen",
+      "id": 257,
       "info": {
         "inputs": ["freq"],
         "outputs": ["out"]

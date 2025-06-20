@@ -24,5 +24,5 @@ void ADSR::process(const float** inputs, int num_inputs, float** outputs, int nu
     for (int i = 0; i < kFloatsPerDSPVector; ++i) {
         out[i] = result[i];
     }
-} 
-} // namespace madronavm::dsp 
+}
+} // namespace madronavm::dsp

@@ -15,7 +15,7 @@
 #endif
 TEST_CASE("Compiler correctly performs topological sort", "[compiler]") {
     std::string path(TEST_DATA_DIR);
-    path += "/simple_patch.json";
+    path += "/a440.json";
     std::ifstream t(path);
     if (!t.is_open()) {
         std::cerr << "Failed to open " << path << std::endl;
@@ -32,7 +32,7 @@ TEST_CASE("Compiler correctly performs topological sort", "[compiler]") {
 }
 TEST_CASE("Compiler detects cycles in graph", "[compiler]") {
     madronavm::PatchGraph graph;
-    graph.nodes = { {1, "sine_osc", {}}, {2, "gain", {}} };
+    graph.nodes = { {1, "sine_gen", {}}, {2, "gain", {}} };
     graph.connections = {
         {1, "out", 2, "in"},
         {2, "out", 1, "freq"} // Cycle back
@@ -44,7 +44,7 @@ TEST_CASE("Compiler correctly generates bytecode", "[compiler]") {
     madronavm::ModuleRegistry registry(MODULE_DEFS_PATH);
     // 2. Load the test patch
     std::string path(TEST_DATA_DIR);
-    path += "/simple_patch.json";
+    path += "/a440.json";
     std::ifstream t(path);
     if (!t.is_open()) {
         throw std::runtime_error("Could not open test patch file: " + path);
@@ -71,14 +71,14 @@ TEST_CASE("Compiler correctly generates bytecode", "[compiler]") {
     uint32_t gain_as_u32;
     std::memcpy(&gain_as_u32, &gain_val, sizeof(gain_val));
     std::vector<uint32_t> expected_instructions = {
-        // Node 1: sine_osc (ID 0x100 = 256)
-        (uint32_t)madronavm::OpCode::LOAD_K, 0, freq_as_u32,          // LOAD_K r0, 440.0
-        (uint32_t)madronavm::OpCode::PROC, 256, 1, 1, 0, 1,          // PROC sine_osc in:[r0] out:[r1]
-        // Node 2: gain (ID 0x401 = 1025)
-        (uint32_t)madronavm::OpCode::LOAD_K, 2, gain_as_u32,           // LOAD_K r2, 0.5
-        (uint32_t)madronavm::OpCode::PROC, 1027, 2, 1, 1, 2, 3,       // PROC gain in:[r1, r2] out:[r3]
+        // Node 1: sine_gen
+        (uint32_t)madronavm::OpCode::LOAD_K, 0, freq_as_u32,
+        (uint32_t)madronavm::OpCode::PROC,    1, 256, 1, 1, 0, 1,
+        // Node 2: gain
+        (uint32_t)madronavm::OpCode::LOAD_K, 2, gain_as_u32,
+        (uint32_t)madronavm::OpCode::PROC,    2, 1027, 2, 1, 1, 2, 3,
         // Node 3: audio_out
-        (uint32_t)madronavm::OpCode::AUDIO_OUT, 2, 3, 3,          // AUDIO_OUT 2 in:[r3, r3]
+        (uint32_t)madronavm::OpCode::AUDIO_OUT, 2, 3, 3,
         // End of program
         (uint32_t)madronavm::OpCode::END
     };

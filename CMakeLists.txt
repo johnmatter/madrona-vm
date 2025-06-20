@@ -33,21 +33,14 @@ else()
     set(AUDIO_FILES "")
 endif()
 file(GLOB_RECURSE UI_FILES "src/ui/*.cpp")
+# Collect test files
+file(GLOB_RECURSE UNIT_TEST_FILES "tests/unit/**/*.cpp")
+file(GLOB_RECURSE INTEGRATION_TEST_FILES "tests/integration/**/*.cpp")
 # Create test executable
 add_executable(run_tests
   tests/TestMain.cpp
-  # Unit Tests
-  tests/unit/compiler/compiler_test.cpp
-  tests/unit/parser/parser_test.cpp
-  tests/unit/dsp/adsr_test.cpp
-  tests/unit/dsp/gain_test.cpp
-  tests/unit/dsp/sine_gen_test.cpp
-  tests/unit/dsp/voice_controller_test.cpp
-  # Integration Tests
-  tests/integration/integration_test.cpp
-  tests/integration/vm_test.cpp
-  tests/integration/vm_math_modules_test.cpp
-  tests/integration/vm_adsr_test.cpp
+  ${UNIT_TEST_FILES}
+  ${INTEGRATION_TEST_FILES}
   ${SRC_FILES}
   ${AUDIO_FILES}
   ${UI_FILES}
@@ -63,16 +56,8 @@ add_executable(simple_vm_demo
   examples/simple_vm_demo.cpp
   ${SRC_FILES}
   ${AUDIO_FILES}
+  ${UI_FILES}
 )
 target_include_directories(simple_vm_demo PRIVATE external/madronalib/Tests)
 target_compile_definitions(simple_vm_demo PRIVATE "MODULE_DEFS_PATH=\"${CMAKE_SOURCE_DIR}/data/modules.json\"")
-target_link_libraries(simple_vm_demo madronalib)
-# Create device selection demo executable
-add_executable(device_selection_demo
-  examples/device_selection_demo.cpp
-  src/dsp/audio_out.cpp
-  src/dsp/module.cpp
-  ${AUDIO_FILES}
-  ${UI_FILES}
-)
-target_link_libraries(device_selection_demo madronalib component)
+target_link_libraries(simple_vm_demo madronalib component)

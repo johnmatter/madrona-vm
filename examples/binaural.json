@@ -1,0 +1,55 @@
+{
+  "modules": [
+    {
+      "id": 1,
+      "name": "sine_gen",
+      "data": {
+        "freq": 70.0
+      }
+    },
+    {
+      "id": 2,
+      "name": "gain",
+      "data": {
+        "gain": 0.25
+      }
+    },
+    {
+      "id": 3,
+      "name": "audio_out",
+      "data": {}
+    },
+    {
+      "id": 4,
+      "name": "gain",
+      "data": {
+        "gain": 0.25
+      }
+    },
+    {
+      "id": 5,
+      "name": "sine_gen",
+      "data": {
+        "freq": 70.2
+      }
+    }
+  ],
+  "connections": [
+    {
+      "from": "1:out",
+      "to": "2:in"
+    },
+    {
+      "from": "2:out",
+      "to": "3:in_l"
+    },
+    {
+      "from": "5:out",
+      "to": "4:in"
+    },
+    {
+      "from": "4:out",
+      "to": "3:in_r"
+    }
+  ]
+}
