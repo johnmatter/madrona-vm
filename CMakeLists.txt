@@ -36,15 +36,18 @@ file(GLOB_RECURSE UI_FILES "src/ui/*.cpp")
 # Create test executable
 add_executable(run_tests
   tests/TestMain.cpp
-  tests/vm/vm_test.cpp
-  tests/integration_test.cpp
-  tests/dsp/sine_gen_test.cpp
-  tests/dsp/voice_controller_test.cpp
-  tests/dsp/adsr_test.cpp
-  tests/dsp/gain_test.cpp
-  tests/dsp/math_modules_test.cpp
-  tests/parser/parser_test.cpp
-  tests/compiler/compiler_test.cpp
+  # Unit Tests
+  tests/unit/compiler/compiler_test.cpp
+  tests/unit/parser/parser_test.cpp
+  tests/unit/dsp/adsr_test.cpp
+  tests/unit/dsp/gain_test.cpp
+  tests/unit/dsp/sine_gen_test.cpp
+  tests/unit/dsp/voice_controller_test.cpp
+  # Integration Tests
+  tests/integration/integration_test.cpp
+  tests/integration/vm_test.cpp
+  tests/integration/vm_math_modules_test.cpp
+  tests/integration/vm_adsr_test.cpp
   ${SRC_FILES}
   ${AUDIO_FILES}
   ${UI_FILES}
