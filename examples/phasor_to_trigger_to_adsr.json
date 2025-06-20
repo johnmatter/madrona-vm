@@ -4,7 +4,7 @@
       "id": 1,
       "name": "phasor_gen",
       "data": {
-        "freq": 2.0
+        "freq": 4.0
       }
     },
     {
@@ -40,7 +40,7 @@
       "id": 6,
       "name": "gain",
       "data": {
-        "gain": 0.5
+        "gain": 0.35
       }
     },
     {
