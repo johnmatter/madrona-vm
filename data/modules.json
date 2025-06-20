@@ -71,6 +71,14 @@
         "inputs": ["gate", "attack", "decay", "sustain", "release"],
         "outputs": ["out"]
       }
+    },
+    {
+      "name": "threshold",
+      "id": 1280,
+      "info": {
+        "inputs": ["signal", "threshold"],
+        "outputs": ["out"]
+      }
     }
   ]
 }

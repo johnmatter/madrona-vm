@@ -1,0 +1,82 @@
+{
+  "modules": [
+    {
+      "id": 1,
+      "name": "phasor_gen",
+      "data": {
+        "freq": 2.0
+      }
+    },
+    {
+      "id": 2,
+      "name": "threshold",
+      "data": {
+        "threshold": 0.5
+      }
+    },
+    {
+      "id": 3,
+      "name": "adsr",
+      "data": {
+        "attack": 0.02,
+        "decay": 0.2,
+        "sustain": 0.2,
+        "release": 0.2
+      }
+    },
+    {
+      "id": 4,
+      "name": "sine_gen",
+      "data": {
+        "freq": 440.0
+      }
+    },
+    {
+      "id": 5,
+      "name": "gain",
+      "data": {}
+    },
+    {
+      "id": 6,
+      "name": "gain",
+      "data": {
+        "gain": 0.5
+      }
+    },
+    {
+      "id": 7,
+      "name": "audio_out",
+      "data": {}
+    }
+  ],
+  "connections": [
+    {
+      "from": "1:out",
+      "to": "2:signal"
+    },
+    {
+      "from": "2:out",
+      "to": "3:gate"
+    },
+    {
+      "from": "4:out",
+      "to": "5:in"
+    },
+    {
+      "from": "3:out",
+      "to": "5:gain"
+    },
+    {
+      "from": "5:out",
+      "to": "6:in"
+    },
+    {
+      "from": "6:out",
+      "to": "7:in_l"
+    },
+    {
+      "from": "6:out",
+      "to": "7:in_r"
+    }
+  ]
+}

@@ -10,6 +10,7 @@
 #include "dsp/add.h"
 #include "dsp/mul.h"
 #include "dsp/adsr.h"
+#include "dsp/threshold.h"
 #include <iostream>
 #include <limits>
 namespace madronavm {
@@ -42,6 +43,8 @@ std::unique_ptr<dsp::DSPModule> VM::create_module(uint32_t module_id) {
       return std::make_unique<dsp::Int>(m_sampleRate);
     case 1536: // adsr (0x600)
       return std::make_unique<dsp::ADSR>(m_sampleRate);
+    case 1280: // threshold (0x500)
+      return std::make_unique<dsp::Threshold>(m_sampleRate);
     default:
       throw std::runtime_error("Unknown module ID: " + std::to_string(module_id));
   }
