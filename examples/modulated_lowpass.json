@@ -1,0 +1,99 @@
+{
+  "modules": [
+    {
+      "id": 1,
+      "name": "phasor_gen",
+      "data": {
+        "freq": 55.0
+      }
+    },
+    {
+      "id": 2,
+      "name": "sine_gen",
+      "data": {
+        "freq": 2
+      }
+    },
+    {
+      "id": 3,
+      "name": "gain",
+      "data": {
+        "gain": 1000.0
+      }
+    },
+    {
+      "id": 4,
+      "name": "add",
+      "data": {}
+    },
+    {
+      "id": 5,
+      "name": "float",
+      "data": {
+        "in": 5.0
+      }
+    },
+    {
+      "id": 6,
+      "name": "lopass",
+      "data": {}
+    },
+    {
+      "id": 7,
+      "name": "gain",
+      "data": {
+        "gain": 0.3
+      }
+    },
+    {
+      "id": 8,
+      "name": "audio_out",
+      "data": {}
+    },
+    {
+      "id": 9,
+      "name": "float",
+      "data": {
+        "in": 10.0
+      }
+    }
+  ],
+  "connections": [
+    {
+      "from": "2:out",
+      "to": "3:in"
+    },
+    {
+      "from": "3:out",
+      "to": "4:in1"
+    },
+    {
+      "from": "5:out",
+      "to": "4:in2"
+    },
+    {
+      "from": "4:out",
+      "to": "6:cutoff"
+    },
+    {
+      "from": "1:out",
+      "to": "6:in"
+    },
+    {
+      "from": "9:out",
+      "to": "6:q"
+    },
+    {
+      "from": "6:out",
+      "to": "7:in"
+    },
+    {
+      "from": "7:out",
+      "to": "8:in_l"
+    },
+    {
+      "from": "7:out",
+      "to": "8:in_r"
+    }
+  ]
+}

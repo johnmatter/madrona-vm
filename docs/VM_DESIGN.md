@@ -107,9 +107,9 @@ The following table outlines the planned module IDs based on the latest audit.
 | `0x103` | `NoiseGen` | `NoiseGen` | White noise generator. |
 | `0x104` | `ImpulseGen`| `ImpulseGen` | Band-limited impulse generator. |
 | **Category 2** | **Filters** | `MLDSPFilters.h` | |
-| `0x200` | `Lopass` | `Lopass` | 1-pole low-pass filter. |
-| `0x201` | `Hipass` | `Hipass` | 1-pole high-pass filter. |
-| `0x202` | `Bandpass` | `Bandpass` | 2-pole band-pass filter. |
+| `0x200` | `Lopass` | `Lopass` | State Variable Filter (SVF) low-pass output. |
+| `0x201` | `Hipass` | `Hipass` | State Variable Filter (SVF) high-pass output. |
+| `0x202` | `Bandpass` | `Bandpass` | State Variable Filter (SVF) band-pass output. |
 | `0x203` | `DCBlock` | `DCBlock` | DC-blocking filter. |
 | `0x204` | `Biquad` | `n/a` | Generic 2-pole, 2-zero filter. (use specific versions) |
 | **Category 3** | **Routing**| `MLDSPRouting.h` | Stateless wrappers. |

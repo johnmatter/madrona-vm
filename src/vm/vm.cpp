@@ -11,6 +11,9 @@
 #include "dsp/mul.h"
 #include "dsp/adsr.h"
 #include "dsp/threshold.h"
+#include "dsp/lopass.h"
+#include "dsp/hipass.h"
+#include "dsp/bandpass.h"
 #include "common/embedded_logging.h"
 #include <limits>
 namespace madronavm {
@@ -45,6 +48,12 @@ std::unique_ptr<dsp::DSPModule> VM::create_module(uint32_t module_id) {
       return std::make_unique<dsp::ADSR>(m_sampleRate);
     case 1280: // threshold (0x500)
       return std::make_unique<dsp::Threshold>(m_sampleRate);
+    case 512: // lopass (0x200)
+      return std::make_unique<dsp::Lopass>(m_sampleRate);
+    case 513: // hipass (0x201)
+      return std::make_unique<dsp::Hipass>(m_sampleRate);
+    case 514: // bandpass (0x202)
+      return std::make_unique<dsp::Bandpass>(m_sampleRate);
     default:
       throw std::runtime_error("Unknown module ID: " + std::to_string(module_id));
   }

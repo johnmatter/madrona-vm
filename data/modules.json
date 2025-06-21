@@ -79,6 +79,30 @@
         "inputs": ["signal", "threshold"],
         "outputs": ["out"]
       }
+    },
+    {
+      "name": "lopass",
+      "id": 512,
+      "info": {
+        "inputs": ["in", "cutoff", "q"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "hipass",
+      "id": 513,
+      "info": {
+        "inputs": ["in", "cutoff", "q"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "bandpass",
+      "id": 514,
+      "info": {
+        "inputs": ["in", "cutoff", "q"],
+        "outputs": ["out"]
+      }
     }
   ]
 }
