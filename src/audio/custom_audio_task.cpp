@@ -1,6 +1,6 @@
 #include "audio/custom_audio_task.h"
 #include "../../external/madronalib/external/rtaudio/RtAudio.h"
-#include <iostream>
+#include "common/embedded_logging.h"
 #include <algorithm>
 namespace ml {
 CustomAudioTask::CustomAudioTask(ml::AudioContext* ctx, AudioCallback callback, unsigned int deviceId)
@@ -15,7 +15,7 @@ int CustomAudioTask::rtAudioCallback(void* outputBuffer, void* inputBuffer, unsi
                                     double /*streamTime*/, RtAudioStreamStatus status, void* userData) {
   auto* task = static_cast<CustomAudioTask*>(userData);
   if (status) {
-    std::cout << "Stream over/underflow detected." << std::endl;
+    MADRONA_AUDIO_LOG_WARN("Stream underflow: status=0x%02X", (uint32_t)status);
   }
   // Set up input and output pointers (non-interleaved)
   constexpr size_t kMaxIOChannels = 64;
@@ -41,18 +41,18 @@ int CustomAudioTask::rtAudioCallback(void* outputBuffer, void* inputBuffer, unsi
 }
 int CustomAudioTask::startAudio() {
   if (mRtAudio->getDeviceCount() < 1) {
-    std::cout << "\nNo audio devices found!\n";
+    MADRONA_AUDIO_LOG_WARN("No audio devices found");
     return 0;
   }
   // List available devices (similar to madronalib)
   RtAudio::DeviceInfo info;
   uint32_t devices = mRtAudio->getDeviceCount();
   auto ids = mRtAudio->getDeviceIds();
-  std::cout << "[CustomAudioTask] Found: " << devices << " device(s)\n";
+  MADRONA_AUDIO_LOG_INFO("Found %u audio devices", devices);
   for (uint32_t i = 0; i < devices; ++i) {
     info = mRtAudio->getDeviceInfo(ids[i]);
-    std::cout << "\tDevice " << ids[i] << ": " << info.name << std::endl;
-    std::cout << "\t\tinputs: " << info.inputChannels << " outputs: " << info.outputChannels << std::endl;
+    MADRONA_AUDIO_LOG_INFO("Device %u: channels=0x%08X", 
+                           ids[i], (info.inputChannels << 16) | info.outputChannels);
   }
   mRtAudio->showWarnings(true);
   int nInputs = mContext->inputs.size();
@@ -78,15 +78,15 @@ int CustomAudioTask::startAudio() {
                                                sampleRate, &bufferFrames, &rtAudioCallback,
                                                this, &options);
   if (result != RTAUDIO_NO_ERROR) {
-    std::cout << "Error opening stream: " << mRtAudio->getErrorText() << std::endl;
+    MADRONA_AUDIO_LOG_WARN("Error opening stream: code=%u", (uint32_t)result);
     return 0;
   }
   result = mRtAudio->startStream();
   if (result != RTAUDIO_NO_ERROR) {
-    std::cout << "Error starting stream: " << mRtAudio->getErrorText() << std::endl;
+    MADRONA_AUDIO_LOG_WARN("Error starting stream: code=%u", (uint32_t)result);
     return 0;
   }
-  std::cout << "Using output device ID: " << oParams.deviceId << std::endl;
+  MADRONA_AUDIO_LOG_INFO("Using output device ID: %u", oParams.deviceId);
   return 1;
 }
 void CustomAudioTask::stopAudio() {

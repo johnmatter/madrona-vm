@@ -11,7 +11,7 @@
 #include "dsp/mul.h"
 #include "dsp/adsr.h"
 #include "dsp/threshold.h"
-#include <iostream>
+#include "common/embedded_logging.h"
 #include <limits>
 namespace madronavm {
 constexpr uint32_t kNullRegister = std::numeric_limits<uint32_t>::max();
@@ -55,19 +55,22 @@ void VM::load_program(std::vector<uint32_t> new_bytecode) {
   // Clear any existing module instances
   m_module_instances.clear();
   if (m_bytecode.size() < sizeof(BytecodeHeader) / sizeof(uint32_t)) {
-    // TODO: error handling
-    std::cerr << "Bytecode is too small for header!" << std::endl;
+    uint32_t required_size = sizeof(BytecodeHeader) / sizeof(uint32_t);
+    MADRONA_VM_LOG_ERROR("Bytecode too small: %u words, need %u", 
+                         (uint32_t)m_bytecode.size(), required_size);
     m_bytecode.clear();
     return;
   }
   auto* header = reinterpret_cast<const BytecodeHeader*>(m_bytecode.data());
   if (header->magic_number != kMagicNumber) {
-    std::cerr << "Invalid bytecode magic number!" << std::endl;
+    MADRONA_VM_LOG_ERROR("Invalid magic number: got 0x%08X, expected 0x%08X", 
+                         header->magic_number, kMagicNumber);
     m_bytecode.clear();
     return;
   }
   if (header->version != kBytecodeVersion) {
-    std::cerr << "Bytecode version mismatch!" << std::endl;
+    MADRONA_VM_LOG_ERROR("Version mismatch: got %u, expected %u", 
+                         header->version, kBytecodeVersion);
     m_bytecode.clear();
     return;
   }
@@ -153,8 +156,8 @@ void VM::process(const float **inputs, float **outputs, int num_frames) {
       return; // End of program for this block
     }
     default: {
-      // TODO: error handling for unknown opcode
-      std::cerr << "Unknown opcode: " << std::hex << m_bytecode[pc] << std::endl;
+      MADRONA_VM_LOG_ERROR("Unknown opcode: 0x%02X at PC=%u", 
+                           m_bytecode[pc], (uint32_t)pc);
       return;
     }
     }
