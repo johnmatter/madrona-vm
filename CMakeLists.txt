@@ -25,6 +25,7 @@ file(GLOB_RECURSE SRC_FILES
   "src/parser/*.cpp"
   "src/compiler/*.cpp"
   "src/vm/*.cpp"
+  "src/common/*.cpp"
 )
 # On Apple, we have some extra files for device selection
 if(APPLE)
@@ -61,3 +62,12 @@ add_executable(simple_vm_demo
 target_include_directories(simple_vm_demo PRIVATE external/madronalib/Tests)
 target_compile_definitions(simple_vm_demo PRIVATE "MODULE_DEFS_PATH=\"${CMAKE_SOURCE_DIR}/data/modules.json\"")
 target_link_libraries(simple_vm_demo madronalib component)
+# Create logging demo executable
+add_executable(logging_demo
+  examples/logging_demo.cpp
+  ${SRC_FILES}
+  ${AUDIO_FILES}
+  ${UI_FILES}
+)
+target_include_directories(logging_demo PRIVATE external/madronalib/Tests)
+target_link_libraries(logging_demo madronalib component)
