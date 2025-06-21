@@ -94,7 +94,6 @@ To keep the registry organized and aligned with the `madronalib` source, we will
 | `5` | Conversions & Scaling | `source/DSP/MLDSPScale.h` & `MLDSPProjections.h`|
 | `6` | Envelopes & Control | `source/DSP/MLDSPFilters.h` (e.g. `ADSR`) |
 | `7` | Effects | `various` |
-
 The following table outlines the planned module IDs and correslonsing madronalib source.
 | Module ID (Hex) | Module Name | `madronalib` Source | Description |
 | :--- | :--- | :--- | :--- |
@@ -103,15 +102,15 @@ The following table outlines the planned module IDs and correslonsing madronalib
 | `0x001` | `AudioOut` | `n/a` | Final audio output sink. (VM-internal concept) |
 | **Category 1** | **Generators** | `MLDSPGens.h` | |
 | `0x100` | `SineGen` | `SineGen` | Sine wave oscillator. |
-| `0x101` | `SawGen` | `phasorToSaw` | Sawtooth wave oscillator. |
-| `0x102` | `PulseGen` | `phasorToPulse` | Pulse wave oscillator. |
+| `0x101` | `SawGen` | `SawGen` | Sawtooth wave oscillator. |
+| `0x102` | `PulseGen` | `PulseGen` | Pulse wave oscillator. |
 | `0x103` | `NoiseGen` | `NoiseGen` | White noise generator. |
 | `0x104` | `ImpulseGen`| `ImpulseGen` | Band-limited impulse generator. |
 | **Category 2** | **Filters** | `MLDSPFilters.h` | |
 | `0x200` | `Lopass` | `Lopass` | State Variable Filter (SVF) low-pass output. |
 | `0x201` | `Hipass` | `Hipass` | State Variable Filter (SVF) high-pass output. |
 | `0x202` | `Bandpass` | `Bandpass` | State Variable Filter (SVF) band-pass output. |
-| `0x203` | `DCBlock` | `DCBlock` | DC-blocking filter. |
+| `0x203` | `DCBlock` | `DCBlocker` | DC-blocking filter. |
 | `0x204` | `Biquad` | `n/a` | Generic 2-pole, 2-zero filter. (use specific versions) |
 | **Category 3** | **Routing**| `MLDSPRouting.h` | Stateless wrappers. |
 | `0x300` | `Mixer` | `mix` | Mix multiple inputs. |
@@ -120,13 +119,12 @@ The following table outlines the planned module IDs and correslonsing madronalib
 | `0x400` | `Add` | `+` | `in1 + in2` |
 | `0x401` | `Multiply` | `*` | `in1 * in2` |
 | `0x402` | `Clip` | `clamp` | Clip signal to `[-in2, in2]`. |
-| `0x403` | `Wrap` | `wrap` | Wrap signal to `[-in2, in2]`. |
-| **Category 5** | **Scaling** | `MLDSPScale.h` etc. | |
+| **Category 5** | **Scaling** | `MLDSPScale.h` & `MLDSPProjections.h` | |
 | `0x500` | `mtof` | `n/a (must implement)` | MIDI note to frequency. |
 | `0x501` | `ftom` | `n/a (must implement)` | Frequency to MIDI note. |
 | `0x502` | `ScaleQuantizer`| `Scale` | Quantize to a musical scale. |
-| `0x503` | `Linear`| `n/a (scalar only)`| Linear range mapping. |
-| `0x504` | `Log`| `n/a (scalar only)`| Logarithmic range mapping. |
+| `0x503` | `Linear`| `linear` (from `MLDSPProjections.h`)| Linear range mapping. |
+| `0x504` | `Log`| `log` (from `MLDSPProjections.h`)| Logarithmic range mapping. |
 | **Category 6** | **Envelopes**| `MLDSPFilters.h` | |
 | `0x600` | `ADSR` | `ADSR` | ADSR envelope generator. |
 | **Category 7** | **Effects** | `various` | |
