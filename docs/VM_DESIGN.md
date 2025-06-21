@@ -94,7 +94,8 @@ To keep the registry organized and aligned with the `madronalib` source, we will
 | `5` | Conversions & Scaling | `source/DSP/MLDSPScale.h` & `MLDSPProjections.h`|
 | `6` | Envelopes & Control | `source/DSP/MLDSPFilters.h` (e.g. `ADSR`) |
 | `7` | Effects | `various` |
-The following table outlines the planned module IDs based on the latest audit.
+
+The following table outlines the planned module IDs and correslonsing madronalib source.
 | Module ID (Hex) | Module Name | `madronalib` Source | Description |
 | :--- | :--- | :--- | :--- |
 | **Category 0** | **System & I/O** | `n/a` | |
