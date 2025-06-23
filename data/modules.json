@@ -1,30 +1,6 @@
 {
   "modules": [
     {
-      "name": "sine_gen",
-      "id": 256,
-      "info": {
-        "inputs": ["freq"],
-        "outputs": ["out"]
-      }
-    },
-    {
-      "name": "phasor_gen",
-      "id": 257,
-      "info": {
-        "inputs": ["freq"],
-        "outputs": ["out"]
-      }
-    },
-    {
-      "name": "gain",
-      "id": 1027,
-      "info": {
-        "inputs": ["in", "gain"],
-        "outputs": ["out"]
-      }
-    },
-    {
       "name": "audio_out",
       "id": 1,
       "info": {
@@ -33,50 +9,34 @@
       }
     },
     {
-      "name": "add",
-      "id": 1024,
+      "name": "sine_gen",
+      "id": 256,
       "info": {
-        "inputs": ["in1", "in2"],
+        "inputs": ["freq"],
         "outputs": ["out"]
       }
     },
     {
-      "name": "mul",
-      "id": 1025,
+      "name": "saw_gen",
+      "id": 257,
       "info": {
-        "inputs": ["in1", "in2"],
+        "inputs": ["freq"],
         "outputs": ["out"]
       }
     },
     {
-      "name": "float",
-      "id": 1028,
+      "name": "pulse_gen",
+      "id": 258,
       "info": {
-        "inputs": ["in"],
+        "inputs": ["freq", "width"],
         "outputs": ["out"]
       }
     },
     {
-      "name": "int",
-      "id": 1029,
+      "name": "phasor_gen",
+      "id": 259,
       "info": {
-        "inputs": ["in"],
-        "outputs": ["out"]
-      }
-    },
-    {
-      "name": "adsr",
-      "id": 1536,
-      "info": {
-        "inputs": ["gate", "attack", "decay", "sustain", "release"],
-        "outputs": ["out"]
-      }
-    },
-    {
-      "name": "threshold",
-      "id": 1280,
-      "info": {
-        "inputs": ["signal", "threshold"],
+        "inputs": ["freq"],
         "outputs": ["out"]
       }
     },
@@ -101,6 +61,70 @@
       "id": 514,
       "info": {
         "inputs": ["in", "cutoff", "q"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "biquad",
+      "id": 516,
+      "info": {
+        "inputs": ["in", "cutoff", "resonance"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "add",
+      "id": 1024,
+      "info": {
+        "inputs": ["in1", "in2"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "mul",
+      "id": 1025,
+      "info": {
+        "inputs": ["in1", "in2"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "gain",
+      "id": 1027,
+      "info": {
+        "inputs": ["in", "gain"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "float",
+      "id": 1028,
+      "info": {
+        "inputs": ["in"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "int",
+      "id": 1029,
+      "info": {
+        "inputs": ["in"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "threshold",
+      "id": 1280,
+      "info": {
+        "inputs": ["signal", "threshold"],
+        "outputs": ["out"]
+      }
+    },
+    {
+      "name": "adsr",
+      "id": 1536,
+      "info": {
+        "inputs": ["gate", "attack", "decay", "sustain", "release"],
         "outputs": ["out"]
       }
     }

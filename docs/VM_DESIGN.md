@@ -95,41 +95,47 @@ To keep the registry organized and aligned with the `madronalib` source, we will
 | `6` | Envelopes & Control | `source/DSP/MLDSPFilters.h` (e.g. `ADSR`) |
 | `7` | Effects | `various` |
 The following table outlines the planned module IDs and correslonsing madronalib source.
-| Module ID (Hex) | Module Name | `madronalib` Source | Description |
-| :--- | :--- | :--- | :--- |
-| **Category 0** | **System & I/O** | `n/a` | |
-| `0x000` | `NoteIn` | `EventsToSignals` | Converts note events to control signals. |
-| `0x001` | `AudioOut` | `n/a` | Final audio output sink. (VM-internal concept) |
-| **Category 1** | **Generators** | `MLDSPGens.h` | |
-| `0x100` | `SineGen` | `SineGen` | Sine wave oscillator. |
-| `0x101` | `SawGen` | `SawGen` | Sawtooth wave oscillator. |
-| `0x102` | `PulseGen` | `PulseGen` | Pulse wave oscillator. |
-| `0x103` | `NoiseGen` | `NoiseGen` | White noise generator. |
-| `0x104` | `ImpulseGen`| `ImpulseGen` | Band-limited impulse generator. |
-| **Category 2** | **Filters** | `MLDSPFilters.h` | |
-| `0x200` | `Lopass` | `Lopass` | State Variable Filter (SVF) low-pass output. |
-| `0x201` | `Hipass` | `Hipass` | State Variable Filter (SVF) high-pass output. |
-| `0x202` | `Bandpass` | `Bandpass` | State Variable Filter (SVF) band-pass output. |
-| `0x203` | `DCBlock` | `DCBlocker` | DC-blocking filter. |
-| `0x204` | `Biquad` | `n/a` | Generic 2-pole, 2-zero filter. (use specific versions) |
-| **Category 3** | **Routing**| `MLDSPRouting.h` | Stateless wrappers. |
-| `0x300` | `Mixer` | `mix` | Mix multiple inputs. |
-| `0x301` | `Crossfader`| `multiplexLinear`| Crossfade between two inputs. |
-| **Category 4** | **Math** | `MLDSPOps.h` | Stateless wrappers. |
-| `0x400` | `Add` | `+` | `in1 + in2` |
-| `0x401` | `Multiply` | `*` | `in1 * in2` |
-| `0x402` | `Clip` | `clamp` | Clip signal to `[-in2, in2]`. |
-| **Category 5** | **Scaling** | `MLDSPScale.h` & `MLDSPProjections.h` | |
-| `0x500` | `mtof` | `n/a (must implement)` | MIDI note to frequency. |
-| `0x501` | `ftom` | `n/a (must implement)` | Frequency to MIDI note. |
-| `0x502` | `ScaleQuantizer`| `Scale` | Quantize to a musical scale. |
-| `0x503` | `Linear`| `linear` (from `MLDSPProjections.h`)| Linear range mapping. |
-| `0x504` | `Log`| `log` (from `MLDSPProjections.h`)| Logarithmic range mapping. |
-| **Category 6** | **Envelopes**| `MLDSPFilters.h` | |
-| `0x600` | `ADSR` | `ADSR` | ADSR envelope generator. |
-| **Category 7** | **Effects** | `various` | |
-| `0x700` | `Saturate` | `n/a (must implement)` | `tanh(in1)`. |
-| `0x701` | `Delay` | `FractionalDelay` | A fractional delay. |
+| Module ID (Hex) | Module Name | `madronalib` Source | Status | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Category 0** | **System & I/O** | `n/a` | | |
+| `0x000` | `NoteIn` | `EventsToSignals` | Planned | Converts note events to control signals. |
+| `0x001` | `AudioOut` | `n/a` | Implemented | Final audio output sink. (VM-internal concept) |
+| **Category 1** | **Generators** | `MLDSPGens.h` | | |
+| `0x100` | `SineGen` | `SineGen` | Implemented | Sine wave oscillator. |
+| `0x101` | `SawGen` | `SawGen` | Implemented | Sawtooth wave oscillator. |
+| `0x102` | `PulseGen` | `PulseGen` | Implemented | Pulse wave oscillator. |
+| `0x103` | `PhasorGen` | `PhasorGen` | Implemented | Naive sawtooth phasor generator. |
+| `0x104` | `NoiseGen` | `NoiseGen` | Planned | White noise generator. |
+| `0x105` | `ImpulseGen`| `ImpulseGen` | Planned | Band-limited impulse generator. |
+| **Category 2** | **Filters** | `MLDSPFilters.h` | | |
+| `0x200` | `Lopass` | `Lopass` | Implemented | State Variable Filter (SVF) low-pass output. |
+| `0x201` | `Hipass` | `Hipass` | Implemented | State Variable Filter (SVF) high-pass output. |
+| `0x202` | `Bandpass` | `Bandpass` | Implemented | State Variable Filter (SVF) band-pass output. |
+| `0x203` | `DCBlock` | `DCBlocker` | Planned | DC-blocking filter. |
+| `0x204` | `Biquad` | `Lopass` (configurable) | Implemented | Generic 2-pole, 2-zero filter. |
+| **Category 3** | **Routing**| `MLDSPRouting.h` | | Stateless wrappers. |
+| `0x300` | `Mixer` | `mix` | Planned | Mix multiple inputs. |
+| `0x301` | `Crossfader`| `multiplexLinear`| Planned | Crossfade between two inputs. |
+| **Category 4** | **Operations & Math** | `MLDSPOps.h` | | Stateless wrappers. |
+| `0x400` | `Add` | `+` | Implemented | `in1 + in2` |
+| `0x401` | `Multiply` | `*` | Implemented | `in1 * in2` |
+| `0x402` | `Clip` | `clamp` | Planned | Clip signal to `[-in2, in2]`. |
+| `0x403` | `Gain` | `*` | Implemented | Signal amplification `signal * gain`. |
+| `0x404` | `Float` | `n/a` | Implemented | Floating-point constant source. |
+| `0x405` | `Int` | `n/a` | Implemented | Integer constant source. |
+| **Category 5** | **Conversions & Scaling** | `MLDSPScale.h` & `MLDSPProjections.h` | | |
+| `0x500` | `Threshold` | `n/a` | Implemented | Binary threshold comparison. |
+| `0x501` | `mtof` | `n/a (must implement)` | Planned | MIDI note to frequency. |
+| `0x502` | `ftom` | `n/a (must implement)` | Planned | Frequency to MIDI note. |
+| `0x503` | `ScaleQuantizer`| `Scale` | Planned | Quantize to a musical scale. |
+| `0x504` | `Linear`| `linear` (from `MLDSPProjections.h`)| Planned | Linear range mapping. |
+| `0x505` | `Log`| `log` (from `MLDSPProjections.h`)| Planned | Logarithmic range mapping. |
+| **Category 6** | **Envelopes & Control**| `MLDSPFilters.h` | | |
+| `0x600` | `ADSR` | `ADSR` | Implemented | ADSR envelope generator. |
+| `0x601` | `VoiceController` | `EventsToSignals` | Implemented | Note events to polyphonic control signals. |
+| **Category 7** | **Effects** | `various` | | |
+| `0x700` | `Saturate` | `n/a (must implement)` | Planned | `tanh(in1)`. |
+| `0x701` | `Delay` | `FractionalDelay` | Planned | A fractional delay. |
 ### Bytecode Layout Example
 Consider a `gain` module, which is just a `Multiply` operation. Its bytecode might look like this, using the new module ID `0x401`:
 ```

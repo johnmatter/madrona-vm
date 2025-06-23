@@ -14,6 +14,9 @@
 #include "dsp/lopass.h"
 #include "dsp/hipass.h"
 #include "dsp/bandpass.h"
+#include "dsp/saw_gen.h"
+#include "dsp/pulse_gen.h"
+#include "dsp/biquad.h"
 #include "common/embedded_logging.h"
 #include <limits>
 namespace madronavm {
@@ -24,36 +27,42 @@ VM::~VM() {}
 std::unique_ptr<dsp::DSPModule> VM::create_module(uint32_t module_id) {
   // Map module IDs to their implementations based on data/modules.json
   switch (module_id) {
-    case 256: // sine_gen
-      return std::make_unique<dsp::SineGen>(m_sampleRate);
-    case 257: // phasor_gen
-      return std::make_unique<dsp::PhasorGen>(m_sampleRate);
-    case 1027: // gain
-      return std::make_unique<dsp::Gain>(m_sampleRate);
-    case 1: // audio_out
+    case 1: // audio_out (0x001)
       // The VM should not create a real audio driver. The main application
       // will create the "real" AudioOut module and link it to the VM.
       // We create one in test mode here so it exists as a module instance,
       // but it won't try to open an audio device.
       return std::make_unique<AudioOut>(m_sampleRate, true);
-    case 1024: // add (0x400)
-      return std::make_unique<dsp::Add>(m_sampleRate);
-    case 1025: // mul (0x401)
-      return std::make_unique<dsp::Mul>(m_sampleRate);
-    case 1028: // float
-      return std::make_unique<dsp::Float>(m_sampleRate);
-    case 1029: // int
-      return std::make_unique<dsp::Int>(m_sampleRate);
-    case 1536: // adsr (0x600)
-      return std::make_unique<dsp::ADSR>(m_sampleRate);
-    case 1280: // threshold (0x500)
-      return std::make_unique<dsp::Threshold>(m_sampleRate);
+    case 256: // sine_gen (0x100)
+      return std::make_unique<dsp::SineGen>(m_sampleRate);
+    case 257: // saw_gen (0x101)
+      return std::make_unique<dsp::SawGen>(m_sampleRate);
+    case 258: // pulse_gen (0x102)
+      return std::make_unique<dsp::PulseGen>(m_sampleRate);
+    case 259: // phasor_gen (0x103 - temporary, not in spec)
+      return std::make_unique<dsp::PhasorGen>(m_sampleRate);
     case 512: // lopass (0x200)
       return std::make_unique<dsp::Lopass>(m_sampleRate);
     case 513: // hipass (0x201)
       return std::make_unique<dsp::Hipass>(m_sampleRate);
     case 514: // bandpass (0x202)
       return std::make_unique<dsp::Bandpass>(m_sampleRate);
+    case 516: // biquad (0x204)
+      return std::make_unique<dsp::Biquad>(m_sampleRate);
+    case 1024: // add (0x400)
+      return std::make_unique<dsp::Add>(m_sampleRate);
+    case 1025: // mul (0x401)
+      return std::make_unique<dsp::Mul>(m_sampleRate);
+    case 1027: // gain (0x403)
+      return std::make_unique<dsp::Gain>(m_sampleRate);
+    case 1028: // float (0x404)
+      return std::make_unique<dsp::Float>(m_sampleRate);
+    case 1029: // int (0x405)
+      return std::make_unique<dsp::Int>(m_sampleRate);
+    case 1280: // threshold (0x500)
+      return std::make_unique<dsp::Threshold>(m_sampleRate);
+    case 1536: // adsr (0x600)
+      return std::make_unique<dsp::ADSR>(m_sampleRate);
     default:
       throw std::runtime_error("Unknown module ID: " + std::to_string(module_id));
   }

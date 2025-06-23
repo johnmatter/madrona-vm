@@ -1,0 +1,359 @@
+{
+  "modules": [
+    {
+      "id": 1,
+      "name": "float",
+      "data": {"in": 4.7}
+    },
+    {
+      "id": 2,
+      "name": "phasor_gen",
+      "data": {}
+    },
+    {
+      "id": 3,
+      "name": "float", 
+      "data": {"in": 7.3}
+    },
+    {
+      "id": 4,
+      "name": "phasor_gen",
+      "data": {}
+    },
+    {
+      "id": 5,
+      "name": "float",
+      "data": {"in": 2.1}
+    },
+    {
+      "id": 6,
+      "name": "mul",
+      "data": {}
+    },
+    {
+      "id": 7,
+      "name": "add",
+      "data": {}
+    },
+    {
+      "id": 41,
+      "name": "float",
+      "data": {"in": 1.8}
+    },
+    {
+      "id": 42,
+      "name": "mul",
+      "data": {}
+    },
+    {
+      "id": 43,
+      "name": "add",
+      "data": {}
+    },
+    {
+      "id": 44,
+      "name": "float",
+      "data": {"in": 0.3}
+    },
+    {
+      "id": 45,
+      "name": "sine_gen",
+      "data": {}
+    },
+    {
+      "id": 46,
+      "name": "float",
+      "data": {"in": 2.5}
+    },
+    {
+      "id": 47,
+      "name": "mul",
+      "data": {}
+    },
+    {
+      "id": 48,
+      "name": "add",
+      "data": {}
+    },
+    {
+      "id": 49,
+      "name": "phasor_gen",
+      "data": {}
+    },
+    {
+      "id": 50,
+      "name": "add",
+      "data": {}
+    },
+    {
+      "id": 51,
+      "name": "float",
+      "data": {"in": 0.6}
+    },
+    {
+      "id": 52,
+      "name": "threshold",
+      "data": {}
+    },
+    {
+      "id": 53,
+      "name": "float",
+      "data": {"in": 0.2}
+    },
+    {
+      "id": 54,
+      "name": "threshold",
+      "data": {}
+    },
+    {
+      "id": 55,
+      "name": "float",
+      "data": {"in": 0.8}
+    },
+    {
+      "id": 56,
+      "name": "threshold",
+      "data": {}
+    },
+    {
+      "id": 57,
+      "name": "add",
+      "data": {}
+    },
+    {
+      "id": 58,
+      "name": "add",
+      "data": {}
+    },
+    {
+      "id": 8,
+      "name": "float",
+      "data": {"in": 0.2}
+    },
+    {
+      "id": 9,
+      "name": "sine_gen",
+      "data": {}
+    },
+    {
+      "id": 10,
+      "name": "float",
+      "data": {"in": 50.0}
+    },
+    {
+      "id": 11,
+      "name": "mul",
+      "data": {}
+    },
+    {
+      "id": 12,
+      "name": "float",
+      "data": {"in": 220.0}
+    },
+    {
+      "id": 13,
+      "name": "add",
+      "data": {}
+    },
+    {
+      "id": 14,
+      "name": "float",
+      "data": {"in": 3.7}
+    },
+    {
+      "id": 15,
+      "name": "mul",
+      "data": {}
+    },
+    {
+      "id": 16,
+      "name": "sine_gen",
+      "data": {}
+    },
+    {
+      "id": 17,
+      "name": "float",
+      "data": {"in": 80.0}
+    },
+    {
+      "id": 18,
+      "name": "mul",
+      "data": {}
+    },
+    {
+      "id": 19,
+      "name": "add",
+      "data": {}
+    },
+    {
+      "id": 20,
+      "name": "pulse_gen",
+      "data": {}
+    },
+    {
+      "id": 21,
+      "name": "float",
+      "data": {"in": 0.3}
+    },
+    {
+      "id": 22,
+      "name": "adsr",
+      "data": {}
+    },
+    {
+      "id": 23,
+      "name": "float",
+      "data": {"in": 0.05}
+    },
+    {
+      "id": 24,
+      "name": "float",
+      "data": {"in": 0.2}
+    },
+    {
+      "id": 25,
+      "name": "float",
+      "data": {"in": 0.7}
+    },
+    {
+      "id": 26,
+      "name": "float",
+      "data": {"in": 0.8}
+    },
+    {
+      "id": 27,
+      "name": "float",
+      "data": {"in": 2000.0}
+    },
+    {
+      "id": 28,
+      "name": "mul",
+      "data": {}
+    },
+    {
+      "id": 29,
+      "name": "float",
+      "data": {"in": 300.0}
+    },
+    {
+      "id": 30,
+      "name": "add",
+      "data": {}
+    },
+    {
+      "id": 31,
+      "name": "lopass",
+      "data": {}
+    },
+    {
+      "id": 32,
+      "name": "float",
+      "data": {"in": 8.0}
+    },
+    {
+      "id": 33,
+      "name": "adsr",
+      "data": {}
+    },
+    {
+      "id": 34,
+      "name": "float",
+      "data": {"in": 0.02}
+    },
+    {
+      "id": 35,
+      "name": "float",
+      "data": {"in": 0.3}
+    },
+    {
+      "id": 36,
+      "name": "float",
+      "data": {"in": 0.6}
+    },
+    {
+      "id": 37,
+      "name": "float",
+      "data": {"in": 1.2}
+    },
+    {
+      "id": 38,
+      "name": "gain",
+      "data": {}
+    },
+    {
+      "id": 39,
+      "name": "float",
+      "data": {"in": 0.3}
+    },
+    {
+      "id": 40,
+      "name": "audio_out",
+      "data": {}
+    }
+  ],
+  "connections": [
+    {"from": "1:out", "to": "2:freq"},
+    {"from": "3:out", "to": "4:freq"},
+    {"from": "45:out", "to": "6:in1"},
+    {"from": "5:out", "to": "6:in2"},
+    {"from": "6:out", "to": "7:in1"},
+    {"from": "47:out", "to": "7:in2"},
+    {"from": "7:out", "to": "49:freq"},
+    {"from": "2:out", "to": "42:in1"},
+    {"from": "41:out", "to": "42:in2"},
+    {"from": "42:out", "to": "43:in1"},
+    {"from": "4:out", "to": "43:in2"},
+    {"from": "44:out", "to": "45:freq"},
+    {"from": "45:out", "to": "47:in1"},
+    {"from": "46:out", "to": "47:in2"},
+    {"from": "2:out", "to": "50:in1"},
+    {"from": "4:out", "to": "50:in2"},
+    {"from": "49:out", "to": "48:in1"},
+    {"from": "43:out", "to": "48:in2"},
+    {"from": "50:out", "to": "52:signal"},
+    {"from": "51:out", "to": "52:threshold"},
+    {"from": "48:out", "to": "54:signal"},
+    {"from": "53:out", "to": "54:threshold"},
+    {"from": "48:out", "to": "56:signal"},
+    {"from": "55:out", "to": "56:threshold"},
+    {"from": "52:out", "to": "57:in1"},
+    {"from": "54:out", "to": "57:in2"},
+    {"from": "57:out", "to": "58:in1"},
+    {"from": "56:out", "to": "58:in2"},
+    {"from": "8:out", "to": "9:freq"},
+    {"from": "9:out", "to": "11:in1"},
+    {"from": "10:out", "to": "11:in2"},
+    {"from": "11:out", "to": "13:in1"},
+    {"from": "12:out", "to": "13:in2"},
+    {"from": "13:out", "to": "15:in1"},
+    {"from": "14:out", "to": "15:in2"},
+    {"from": "15:out", "to": "16:freq"},
+    {"from": "16:out", "to": "18:in1"},
+    {"from": "17:out", "to": "18:in2"},
+    {"from": "13:out", "to": "19:in1"},
+    {"from": "18:out", "to": "19:in2"},
+    {"from": "19:out", "to": "20:freq"},
+    {"from": "21:out", "to": "20:width"},
+    {"from": "58:out", "to": "22:gate"},
+    {"from": "23:out", "to": "22:attack"},
+    {"from": "24:out", "to": "22:decay"},
+    {"from": "25:out", "to": "22:sustain"},
+    {"from": "26:out", "to": "22:release"},
+    {"from": "22:out", "to": "28:in1"},
+    {"from": "27:out", "to": "28:in2"},
+    {"from": "28:out", "to": "30:in1"},
+    {"from": "29:out", "to": "30:in2"},
+    {"from": "20:out", "to": "31:in"},
+    {"from": "30:out", "to": "31:cutoff"},
+    {"from": "32:out", "to": "31:q"},
+    {"from": "58:out", "to": "33:gate"},
+    {"from": "34:out", "to": "33:attack"},
+    {"from": "35:out", "to": "33:decay"},
+    {"from": "36:out", "to": "33:sustain"},
+    {"from": "37:out", "to": "33:release"},
+    {"from": "31:out", "to": "38:in"},
+    {"from": "33:out", "to": "38:gain"},
+    {"from": "38:out", "to": "40:in_l"},
+    {"from": "38:out", "to": "40:in_r"}
+  ]
+} 
